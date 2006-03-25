@@ -31,14 +31,15 @@ main (int argc, char **argv)
 	/*
 	 * xmmsc_result_t is the struct returned from all
 	 * commands that are given to the xmms2d server
-	 * we just declare it here, we need it later.
+	 * we just declare a variable of this type here,
+	 * we'll need it later.
 	 */
 	xmmsc_result_t *result;
 
 	/*
-	 * And first we need to initialize it
+	 * First we need to initialize the connection;
 	 * as argument you need to pass "name" of your
-	 * client. the name has to been in [a-zA-Z0-9]
+	 * client. The name has to be in the range [a-zA-Z0-9]
 	 * because xmms is deriving configuration values
 	 * from this name.
 	 */
@@ -54,10 +55,10 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * Now we need to connect to xmms2d. we need to
+	 * Now we need to connect to xmms2d. We need to
 	 * pass the XMMS ipc-path to the connect call.
-	 * If passed NULL it will default to 
-	 * unix:///tmp/xmms-ipc-<user>, but all xmms2 client
+	 * If passed NULL, it will default to 
+	 * unix:///tmp/xmms-ipc-<user>, but all xmms2 clients
 	 * should handle the XMMS_PATH enviroment in
 	 * order to configure connection path.
 	 *
@@ -73,22 +74,22 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * This is all you have to do to connect to xmms2d
+	 * This is all you have to do to connect to xmms2d.
 	 * Now we can send commands. Let's do something easy
-	 * like get xmms2d to start playback.
+	 * like getting xmms2d to start playback.
 	 */
 	result = xmmsc_playback_start (connection);
 
 	/*
-	 * The command will be sent and since this is a
-	 * syncronous connection we can block for it's 
+	 * The command will be sent, and since this is a
+	 * synchronous connection we can block for its 
 	 * return here. The async / sync issue will be
 	 * commented on later.
 	 */
 	xmmsc_result_wait (result);
 
 	/*
-	 * When xmmsc_result_wait() returns we have the
+	 * When xmmsc_result_wait() returns, we have the
 	 * answer from the server. Let's check for errors
 	 * and print it out if something went wrong
 	 */
@@ -98,11 +99,11 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * This is very important, when we are done with the
+	 * This is very important - when we are done with the
 	 * result we need to tell that to the clientlib,
 	 * we do that by unrefing it. this will free resources
-	 * and make sure that we don't leak memory. There is
-	 * not possible to touch result after we done this.
+	 * and make sure that we don't leak memory. It is
+	 * not possible to touch the result after we have done this.
 	 */
 	xmmsc_result_unref (result);
 
