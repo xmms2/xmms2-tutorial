@@ -25,14 +25,14 @@ int
 main (int argc, char **argv)
 {
 	/*
-	 * The first parts of this program is
-	 * commented in tut1.c and tut2.c 
+	 * The first part of this program is
+	 * commented on in tut1.c and tut2.c 
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
 
 	/*
-	 * Values that we need later
+	 * Variables that we'll need later
 	 */
 	char *val;
 	int intval;
@@ -83,16 +83,17 @@ main (int argc, char **argv)
 	/*
 	 * Something about the medialib and xmms2. All
 	 * entries that are played, put into playlists
-	 * have to be in the medialib. It will be added
-	 * the first time you do "xmms2 add" or equivalent.
+	 * have to be in the medialib. A song's metadata
+	 * will be added to the medialib the first time
+	 * you do "xmms2 add" or equivalent.
 	 *
-	 * When we request information for a entry it will
+	 * When we request information for an entry, it will
 	 * be requested from the medialib, not the playlist
 	 * or the playback. The playlist and playback only
-	 * knows the unique id of the entry. All other 
+	 * know the unique id of the entry. All other 
 	 * information must be retrieved in subsequent calls.
 	 *
-	 * Entry 0 is non valid. only 1-inf is valid.
+	 * Entry 0 is non valid. Only 1-inf is valid.
 	 * So let's check for 0 and don't ask medialib for it.
 	 */
 	if (id == 0) {
@@ -103,14 +104,14 @@ main (int argc, char **argv)
 	/* 
 	 * And now for something about return types from
 	 * clientlib. The clientlib will always return
-	 * a xmmsc_result_t that will eventually be filled.
-	 * It can be filled with int, uint and string. As
-	 * base types. But also with more complex types
-	 * like lists and dicts. A dict is a key<->value
+	 * an xmmsc_result_t that will eventually be filled.
+	 * It can be filled with int, uint and string  as
+	 * base types. It can also be filled with more complex
+	 * types like lists and dicts. A dict is a key<->value
 	 * representation where key is always a string but
-	 * the value can be int,uint or string.
+	 * the value can be int, uint or string.
 	 *
-	 * When retrieving a entry from the medialib you
+	 * When retrieving an entry from the medialib, you
 	 * get a dict as return. Let's print out some
 	 * entries from it and then traverse the dict.
 	 */
@@ -157,7 +158,7 @@ main (int argc, char **argv)
 	printf ("title = %s\n", val);
 
 	/*
-	 * Let's extract a integer also
+	 * Let's extract an integer also
 	 */
 	if (!xmmsc_result_get_dict_entry_int32 (result, "bitrate", &intval)) {
 		fprintf (stderr, "Couldn't get key 'bitrate' from dict\n");
