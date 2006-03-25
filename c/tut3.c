@@ -143,17 +143,19 @@ main (int argc, char **argv)
 		 * You can check this before trying to get the value with
 		 * xmmsc_result_get_dict_entry_type. It will return
 		 * XMMSC_RESULT_VALUE_TYPE_NONE if it's not in the dict.
+		 *
+		 * Actually this is no disasater, it might just mean that
+		 * we don't have a artist tag on this entry. Let's
+		 * called it no artist for now.
 		 */
-		fprintf (stderr, "Couldn't get key 'artist' from dict\n");
-		exit (EXIT_FAILURE);
+		val = "No Artist";
 	}
 
 	/* print the value */
 	printf ("artist = %s\n", val);
 
 	if (!xmmsc_result_get_dict_entry_str (result, "title", &val)) {
-		fprintf (stderr, "Couldn't get key 'title' from dict\n");
-		exit (EXIT_FAILURE);
+		val = "No Title";
 	}
 	printf ("title = %s\n", val);
 
@@ -161,8 +163,7 @@ main (int argc, char **argv)
 	 * Let's extract an integer as well
 	 */
 	if (!xmmsc_result_get_dict_entry_int32 (result, "bitrate", &intval)) {
-		fprintf (stderr, "Couldn't get key 'bitrate' from dict\n");
-		exit (EXIT_FAILURE);
+		intval = 0;
 	}
 	printf ("bitrate = %i\n", intval);
 
