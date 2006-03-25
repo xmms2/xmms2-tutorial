@@ -49,21 +49,18 @@ get_mediainfo (xmmsc_connection_t *connection,
 	}
 
 	if (!xmmsc_result_get_dict_entry_str (result, "artist", &val)) {
-		fprintf (stderr, "Couldn't get key 'artist' from dict\n");
-		exit (EXIT_FAILURE);
+		val = "No artist";
 	}
 
 	printf ("artist = %s\n", val);
 
 	if (!xmmsc_result_get_dict_entry_str (result, "title", &val)) {
-		fprintf (stderr, "Couldn't get key 'title' from dict\n");
-		exit (EXIT_FAILURE);
+		val = "Title";
 	}
 	printf ("title = %s\n", val);
 
 	if (!xmmsc_result_get_dict_entry_int32 (result, "bitrate", &intval)) {
-		fprintf (stderr, "Couldn't get key 'bitrate' from dict\n");
-		exit (EXIT_FAILURE);
+		intval = 0;
 	}
 	printf ("bitrate = %i\n", intval);
 
