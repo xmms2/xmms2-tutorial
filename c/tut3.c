@@ -84,7 +84,7 @@ main (int argc, char **argv)
 	 * Something about the medialib and xmms2. All
 	 * entries that are played, put into playlists
 	 * have to be in the medialib. It will be added
-	 * the first time you do "xmms2 add" or equivilent.
+	 * the first time you do "xmms2 add" or equivalent.
 	 *
 	 * When we request information for a entry it will
 	 * be requested from the medialib, not the playlist
@@ -126,6 +126,7 @@ main (int argc, char **argv)
 		 */
 		fprintf (stderr, "medialib get info returns error, %s\n",
 		         xmmsc_result_get_error (result));
+		exit (EXIT_FAILURE);
 	}
 
 	/*
@@ -172,7 +173,7 @@ main (int argc, char **argv)
 	 * xmmsc_result_get_dict_entry_* so if you want to
 	 * keep strings somewhere you need to copy that
 	 * memory! very important otherwise you will get
-	 * crashes.
+	 * undefined behaviour.
 	 */
 	xmmsc_result_unref (result);
 

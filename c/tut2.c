@@ -52,7 +52,7 @@ main (int argc, char **argv)
 	 * a result. Let's find out which entry that
 	 * is currently playing. 
 	 *
-	 * Note that this program has be runned while 
+	 * Note that this program has be run while 
 	 * xmms2 is playing something otherwise it 
 	 * will return 0.
 	 */
