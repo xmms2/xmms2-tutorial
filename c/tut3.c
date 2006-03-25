@@ -38,7 +38,7 @@ main (int argc, char **argv)
 	int intval;
 	unsigned int id;
 
-	connection = xmmsc_init ("tutorial1");
+	connection = xmmsc_init ("tutorial3");
 	if (!connection) {
 		fprintf (stderr, "OOM!\n");
 		exit (EXIT_FAILURE);
@@ -158,7 +158,7 @@ main (int argc, char **argv)
 	printf ("title = %s\n", val);
 
 	/*
-	 * Let's extract an integer also
+	 * Let's extract an integer as well
 	 */
 	if (!xmmsc_result_get_dict_entry_int32 (result, "bitrate", &intval)) {
 		fprintf (stderr, "Couldn't get key 'bitrate' from dict\n");

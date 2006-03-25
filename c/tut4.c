@@ -21,10 +21,10 @@
 #include <xmmsclient/xmmsclient.h>
 
 /*
- * This function is basicly the same as
+ * This function is basically the same as
  * tut3.c. But since we doing it
- * repeatidly in the playlist getter, we
- * move it to an own function.
+ * repeatedly in the playlist getter, we
+ * move it to a separate function.
  *
  * print out artist, title and bitrate
  * for each entry in the playlist.
@@ -75,17 +75,17 @@ int
 main (int argc, char **argv)
 {
 	/*
-	 * The first parts of this program is
+	 * The first part of this program is
 	 * commented in tut1.c
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
 
 	/*
-	 * Values that we need later
+	 * Variables that we'll need later
 	 */
 
-	connection = xmmsc_init ("tutorial1");
+	connection = xmmsc_init ("tutorial4");
 	if (!connection) {
 		fprintf (stderr, "OOM!\n");
 		exit (EXIT_FAILURE);
@@ -99,17 +99,17 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * So lets look at lists. Lists can only contain
+	 * So let's look at lists. Lists can only contain
 	 * one type of values. So you either have a list
-	 * of strings, int or uints. In this case we
-	 * ask for the whole current playlist. It will return
-	 * a result with a list of uints. Each uint is the
-	 * id number of the entry.
+	 * of strings, a list of ints or a list of uints.
+	 * In this case we ask for the whole current playlist.
+	 * It will return a result with a list of uints.
+	 * Each uint is the id number of the entry.
 	 *
-	 * The playlist has two important numbers. The entry
+	 * The playlist has two important numbers: the entry
 	 * and the position. Each alteration command (move,
 	 * remove) works on the position of the entry rather
-	 * then the id. This is because you can have more
+	 * than the id. This is because you can have more
 	 * than one item of the same entry in the playlist.
 	 *
 	 * first we ask for the playlist.
@@ -130,13 +130,13 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * Now iterate the list. You use the same calls that
+	 * Now iterate the list. You use the same calls as
 	 * if the result was a normal one: xmmsc_result_get_int
 	 * and so on. But you also tell the list to move forward
 	 * in the for loop.
 	 */
 	for (;xmmsc_result_list_valid (result); xmmsc_result_list_next (result)) {
-		/* lets extract the id per node in the list */
+		/* let's extract the id per node in the list */
 		unsigned int id;
 		if (!xmmsc_result_get_uint (result, &id)) {
 			/* whoops, this should never happen unless
@@ -145,8 +145,8 @@ main (int argc, char **argv)
 			exit (EXIT_FAILURE);
 		}
 
-		/* now we have a id number saved in the id variable
-		 * let's feed it to the function above (which
+		/* Now we have an id number saved in the id variable.
+		 * Let's feed it to the function above (which
 		 * is the same as we learned in tut3.c).
 		 * and print out some pretty numbers.
 		 */
@@ -167,7 +167,7 @@ main (int argc, char **argv)
 	/*
 	 * At this point we have gone through the whole list and
 	 * xmmsc_result_list_valid() will return negative to
-	 * help tell us that we EOFed the list.
+	 * help tell us that we've reached the end of the list.
 	 *
 	 * We can now call xmmsc_result_list_first() to return
 	 * to the beginning if we need to work with it some
