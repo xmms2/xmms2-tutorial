@@ -53,8 +53,8 @@ main (int argc, char **argv)
 	 * is currently playing. 
 	 *
 	 * Note that this program has be run while 
-	 * xmms2 is playing something, xmmsc_playback_current_id 
-	 * will return 0.
+	 * xmms2 is playing something, otherwise
+	 * xmmsc_playback_current_id will return 0.
 	 */
 	result = xmmsc_playback_current_id (connection);
 
