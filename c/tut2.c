@@ -24,17 +24,17 @@ int
 main (int argc, char **argv)
 {
 	/*
-	 * The first parts of this program is
-	 * commented in tut1.c see that one for
+	 * The first part of this program is
+	 * commented in tut1.c See that one for
 	 * instructions
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
 
-	/* this will be used later */
+	/* This will be used later */
 	unsigned int id;
 
-	connection = xmmsc_init ("tutorial1");
+	connection = xmmsc_init ("tutorial2");
 	if (!connection) {
 		fprintf (stderr, "OOM!\n");
 		exit (EXIT_FAILURE);
@@ -49,11 +49,11 @@ main (int argc, char **argv)
 
 	/*
 	 * Now we send a command that will return
-	 * a result. Let's find out which entry that
+	 * a result. Let's find out which entry
 	 * is currently playing. 
 	 *
-	 * Note that this program has be runned while 
-	 * xmms2 is playing something otherwise it 
+	 * Note that this program has be run while 
+	 * xmms2 is playing something, xmmsc_playback_current_id 
 	 * will return 0.
 	 */
 	result = xmmsc_playback_current_id (connection);
@@ -67,7 +67,7 @@ main (int argc, char **argv)
 	/*
 	 * Also this time we need to check for errors.
 	 * Errors can occur on all commands, but not signals
-	 * and broadcast. We will talk about this later.
+	 * and broadcasts. We will talk about these later.
 	 */
 	if (xmmsc_result_iserror (result)) {
 		fprintf (stderr, "playback current id returns error, %s",
@@ -77,7 +77,7 @@ main (int argc, char **argv)
 	/*
 	 * Let's retrieve the value from the result struct.
 	 * The caveat here is that you have to know what type
-	 * of return value that each commands gives.
+	 * of value is returned in response to each command.
 	 *
 	 * In this case we know that xmmsc_playback_current_id
 	 * will return a UINT
