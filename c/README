@@ -22,3 +22,8 @@ tut3:
 How to retrieve data from the medialib, and dealing with dicts. This example
 involves fetching the artist, title and bitrate of the currently playing
 song in XMMS2.
+
+tut4:
+How to retrieve the current playlist from the server and use the knowlegde
+gained in tut3 to print it out.
+

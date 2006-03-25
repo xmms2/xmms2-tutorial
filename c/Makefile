@@ -6,7 +6,7 @@ LIBS=`pkg-config --libs xmms2-client`
 tut%: tut%.o
 	gcc -o $@ $< $(LIBS)
 
-all: tut1 tut2 tut3
+all: tut1 tut2 tut3 tut4
 
 clean:
 	rm -f tut? *.o
