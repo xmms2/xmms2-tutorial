@@ -1,7 +1,24 @@
+XMMS2 C client tutorials
+
+This directory contains sample C programs to help you learn about what's
+involved in writing an XMMS2 client. The C files provided are fully commented
+to explain the steps involved.
+
+=== Building ===
+To build a tutorial, run 'make tutX' where 'X' is a tutorial number.
+Alternatively, run 'make all' to build all the tutorials.
+
+
+=== Tutorial Descriptions ===
+
 tut1: 
-will show how to connect to the xmms2d and send a basic command 
+Will show how to connect to the xmms2d and send a basic command 
 without reply
 
 tut2:
-how to do simple value retrieval. in this case the current playing id.
+How to do simple value retrieval. In this case the current playing id.
 
+tut3:
+How to retrieve data from the medialib, and dealing with dicts. This example
+involves fetching the artist, title and bitrate of the currently playing
+song in XMMS2.
