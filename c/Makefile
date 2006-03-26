@@ -1,12 +1,16 @@
 LIBS=`pkg-config --libs xmms2-client`
+GLIB=`pkg-config --libs xmms2-client-glib` `pkg-config --libs glib-2.0`
+
+all: tut1 tut2 tut3 tut4 tut5 tut6
 
 %.o: %.c
-	gcc `pkg-config --cflags xmms2-client` -Wall -c -o $@ $< 
+	gcc `pkg-config --cflags xmms2-client glib-2.0` -Wall -c -o $@ $< 
 
 tut%: tut%.o
 	gcc -o $@ $< $(LIBS)
 
-all: tut1 tut2 tut3 tut4 tut5
+tut6: tut6.o
+	gcc -o $@ $< $(LIBS) $(GLIB)
 
 clean:
 	rm -f tut? *.o

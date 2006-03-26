@@ -30,3 +30,8 @@ gained in tut3 to print it out.
 tut5:
 On the topic of propdicts and dicts and foreaching dicts.
 
+''' Here the async clients start '''
+
+tut6:
+Connect a async client to the GMainloop and recive a signal.
+
