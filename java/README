@@ -1,0 +1,55 @@
+XMMS2 Java client tutorials
+
+This directory, or better the package org.xmms2.tutorial, 
+contains sample Java programs to help you learn about what's
+involved in writing an XMMS2 client. The Java files provided are fully commented
+to explain the steps involved.
+
+=== Building ===
+To build the tutorials you need a jdk or gcj installed. Build every classfile
+by issuing a command like
+
+	javac -cp /usr/local/share/xmms2/java/xmms2java.jar org/xmms2/tutorial/Tut7.java
+
+in this directory. The classpath argument should point to your xmms2java.jar.
+If you set a PREFIX when installing xmms2 that package is somewhere else.
+
+To run the programs call
+
+	java -Djava.library.path="/usr/local/lib" -cp /usr/local/share/xmms2/java/xmms2java.jar:. \
+		org.xmms2.tutorial.Tut7
+
+It's maybe not necessary to set java.library.path here if libxmms2java.so is already in it.
+That's e.g. the case if you set your PREFIX to /usr and so the library resides in /usr/lib
+which is usually already in java.library.path. The defaultinstallation usually goes to
+/usr/local and so the lib is in /usr/local/lib which is maybe no in java.library.path. And add
+xmms2java.jar _and_ . (current directory) as shown above to the classpath. Otherwise startup
+will fail.
+
+=== Tutorial Descriptions ===
+
+tut1:
+Will show how to connect to the xmms2d and send a basic command
+without reply
+
+tut2:
+How to do simple value retrieval. In this case the current playing id.
+
+tut3:
+How to retrieve data from the medialib, and dealing with dicts. This example
+involves fetching the artist, title and bitrate of the currently playing
+song in XMMS2.
+
+tut4:
+How to retrieve the current playlist from the server and use the knowlegde
+gained in tut3 to print it out.
+
+tut5:
+On the topic of propdicts and dicts and foreaching dicts.
+
+tut6:
+Connect an async client to the JMain and recive a signal.
+
+tut7:
+Introduce signals and broadcasts using the JMain as it is intended
+to be used.
