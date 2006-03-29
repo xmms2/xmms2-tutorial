@@ -13,6 +13,7 @@
 #  Lesser General Public License for more details.
 #
 #  This file is a part of the XMMS2 client tutorial #2
+#  Here we will learn to retrieve results from a command
 
 import xmmsclient
 import os
