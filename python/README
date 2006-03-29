@@ -1,0 +1,31 @@
+XMMS2 Python client tutorials
+
+This directory contains sample Python programs to help you learn about what's
+involved in writing an XMMS2 client. The Python files provided are fully
+commented to explain the steps involved.
+
+=== Tutorial Descriptions ===
+
+tut1: 
+Will show how to connect to the xmms2d and send a basic command 
+without reply
+
+tut2:
+How to do simple value retrieval. In this case the current playing id.
+
+tut3:
+How to retrieve data from the medialib, and dealing with dicts. This example
+involves fetching the artist, title and bitrate of the currently playing
+song in XMMS2.
+
+tut4:
+How to retrieve the current playlist from the server and use the knowlegde
+gained in tut3 to print it out.
+
+tut5:
+On the topic of propdicts and dicts and foreaching dicts.
+
+''' Here the async clients start '''
+
+tut6:
+Connect a async client to the GMainloop and recive a signal.
