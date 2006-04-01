@@ -46,7 +46,7 @@ my_dict_foreach (const void *key, xmmsc_result_value_type_t type,
 				/* 
 				 * both these can be handled
 				 * the same way when we just print
-				 * it
+				 * them
 				 */
 				int val = XPOINTER_TO_INT (value);
 				printf ("%s = %d\n", k, val);
@@ -68,7 +68,7 @@ my_dict_foreach (const void *key, xmmsc_result_value_type_t type,
 
 /*
  * This function is the same as above, but it also
- * take a source argument.
+ * takes a source argument.
  */
 void
 my_propdict_foreach (const void *key, xmmsc_result_value_type_t type,
@@ -90,9 +90,9 @@ my_propdict_foreach (const void *key, xmmsc_result_value_type_t type,
 		case XMMSC_RESULT_VALUE_TYPE_INT32:
 			{
 				/* 
-				 * both these can be handled
+				 * both of these can be handled
 				 * the same way when we just print
-				 * it
+				 * them
 				 */
 				int val = XPOINTER_TO_INT (value);
 				printf ("%s:%s = %d\n", source, k, val);
@@ -140,20 +140,20 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * In tut3 we learned about dicts. But there is more to known on this
+	 * In tut3 we learned about dicts. But there is more to know on this
 	 * topic. There are actually two kinds of dicts. The normal ones and 
 	 * property dicts. I will try to explain them here.
 	 *
-	 * Normal dict contains key:value mapping as normal. Getting values from
-	 * this is straight forward just run xmmsc_result_get_dict_value_* as
+	 * A normal dict contains key:value mappings as normal. Getting values from
+	 * this is straight forward: just run xmmsc_result_get_dict_value_* as
 	 * we did in tut3.
 	 *
 	 * Property dicts are dicts that can have the same key multiple times.
 	 * Like two "artists" or "titles". Running xmmsc_result_get_dict_value_*
-	 * on these dicts will cause it to return on of the values. The priority
-	 * of which that should be returned is set by:
-	 * xmmsc_result_source_preference_set(). Property dicts is primarly used
-	 * by the medialib. In this case the source refers to the application who
+	 * on these dicts will cause it to return one of the values. The priority
+	 * of which value to be returned is set by:
+	 * xmmsc_result_source_preference_set(). Property dicts is primarily used
+	 * by the medialib. In this case the source refers to the application which
 	 * set the tag.
 	 *
 	 * Most of the time you don't have to care because the default source is
