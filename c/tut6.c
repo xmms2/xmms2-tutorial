@@ -12,7 +12,7 @@
  *  Lesser General Public License for more details.
  *
  *  This file is a part of the XMMS2 client tutorial #6
- *  Introducing asyncronous clients
+ *  Introducing asynchronous clients
  */
 
 #include <stdlib.h>
@@ -71,7 +71,7 @@ main (int argc, char **argv)
 	xmmsc_result_t *result;
 
 	/*
-	 * In a async client we still connect as
+	 * In an async client we still connect as
 	 * normal. Read up on this in earlier
 	 * tutorials if you need.
 	 */
@@ -95,14 +95,14 @@ main (int argc, char **argv)
 	ml = g_main_loop_new (NULL, FALSE);
 
 	/*
-	 * The big difference between a sync client and a async client is that the
-	 * async client works with callbacks. When you send a command and get a
+	 * The big difference between a sync client and an async client is that the
+	 * async client works with callbacks. When you send a command and get an
 	 * xmmsc_result_t back you should set up a callback for it and directly
 	 * unref it. This means we can't do syncronous operations on this connection.
 	 *
 	 * In simple cases you can use the XMMS_CALLBACK_SET macro, but in order to
-	 * be verbosive here I do it all manually. Let's ask for the current id 
-	 * in a async way instead of the sync way as we did in tut2.
+	 * be verbose here I do it all manually. Let's ask for the current id 
+	 * in an async way instead of the sync way as we did in tut2.
 	 */
 
 	result = xmmsc_playback_current_id (connection);
@@ -118,7 +118,7 @@ main (int argc, char **argv)
 	 *
 	 * In order to make xmmsclient call your callback functions we need to put
 	 * the fd of the connection into the mainloop of our program. For your
-	 * convience the xmmsclient lib ships with automatic integration with
+	 * convenience the xmmsclient lib ships with automatic integration with
 	 * GMainLoop. We just need to link with xmmsclient-glib and do the following
 	 * call to make it work.
 	 */
