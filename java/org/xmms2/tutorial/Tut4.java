@@ -41,7 +41,7 @@ public class Tut4 {
 	 * print out artist, title and bitrate
 	 * for each entry in the playlist.
 	 */
-	public static void get_mediainfo (SWIGTYPE_p_xmmsc_connection_St connection, int id){
+	public static void get_mediainfo (SWIGTYPE_p_xmmsc_connection_St connection, long id){
 		SWIGTYPE_p_xmmsc_result_St result;
 		
 		/*
@@ -169,7 +169,7 @@ public class Tut4 {
 			 * function and that's what we want ;). The values you wanted are on the first
 			 * element of the array.
 			 */
-			int id[] = new int[1];
+			long id[] = new long[1];
 			if (Xmmsclient.xmmsc_result_get_uint (result, id) != 1) {
 				/* whoops, this should never happen unless
 				 * you did something wrong */

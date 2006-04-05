@@ -19,12 +19,9 @@ package org.xmms2.tutorial;
 
 /*
  * We need even more imports now since we are setting a notifier, work with a Mainloop 
- * and kill the program after some time. For killing we use a simple Timer and a TimerTask,
- * our Mainloop is JMain and we need again CallbacksListener.
+ * and kill the program after some time. We exit the program in the callback after we 
+ * got it
  */
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.xmms2.CallbacksAdapter;
 import org.xmms2.JMain;
@@ -119,7 +116,7 @@ public class Tut6 extends CallbacksAdapter{
 		
 		result = Xmmsclient.xmmsc_playback_current_id (connection);
 		Xmmsclient.xmmsc_result_notifier_set (result, 
-				XmmsclientConstants.CALLBACK_PLAYBACK_ID, new int[]{0});
+				XmmsclientConstants.CALLBACK_PLAYBACK_ID, 0);
 		Xmmsclient.xmmsc_result_unref (result);
 		
 		/*
@@ -132,19 +129,6 @@ public class Tut6 extends CallbacksAdapter{
 		 * In order to make xmmsclient call your callback functions we had to
 		 * start JMain right above. Before doing so the callback gets lost
 		 */
-		
-		/*
-		 * The following timer kills the program after 2s. This is necessary since
-		 * the callback can take some time and quiting immediatly is too fast.
-		 * But without it we would run forever which isn#t nice though
-		 */
-		new Timer().schedule(new TimerTask(){
-			public void run() {
-				loop.spinDown();
-				Xmmsclient.xmmsc_unref(connection);
-				System.exit(0);
-			}
-		}, 2000);
 	}
 	
 	/*
@@ -165,7 +149,7 @@ public class Tut6 extends CallbacksAdapter{
 		 * At this point the result struct is filled with the
 		 * answer. And we can now extract it as normal.
 		 */
-		int id[] = new int[1];
+		long id[] = new long[1];
 		
 		if (Xmmsclient.xmmsc_result_get_uint (resultx, id) != 1) {
 			System.err.println("Result didn't contain right type!");
@@ -173,6 +157,10 @@ public class Tut6 extends CallbacksAdapter{
 		}
 		
 		System.out.println ("Current id is " + id[0]);
+		
+		loop.spinDown();
+		Xmmsclient.xmmsc_unref(connection);
+		System.exit(0);
 	}
 	
 	

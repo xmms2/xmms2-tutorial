@@ -6,6 +6,19 @@ involved in writing an XMMS2 client. The Java files provided are fully commented
 to explain the steps involved.
 
 === Building ===
+
+You have to apply two patches to your current xmms2 tree which can either be latest
+-stable (Dolittle) or some -devel right after that release. Without those patches
+you won't be able to build and run the tutorials.
+
+#1: http://bugs.xmms2.xmms.se/view.php?id=720
+#2: http://bugs.xmms2.xmms.se/view.php?id=724
+
+download both .patch files and apply them via
+
+	cg-patch -c < patchfile.patch
+
+
 To build the tutorials you need a jdk or gcj installed. Build every classfile
 by issuing a command like
 
@@ -27,6 +40,12 @@ xmms2java.jar _and_ . (current directory) as shown above to the classpath. Other
 will fail.
 
 === Tutorial Descriptions ===
+
+Tutorials 1 to 7 use the c-like api swig generates for you. If you want a better java-way use
+the new java-api which makes everything a bit different. The java-api is quite easy to use
+and follows the MVC-pattern (don't ask what a pattern is, buy a book, it will improve your
+skillz). The java-api is explained in tutorials 8-10. It is quite different to use and
+completely async and OO.
 
 tut1:
 Will show how to connect to the xmms2d and send a basic command
@@ -53,3 +72,25 @@ Connect an async client to the JMain and recive a signal.
 tut7:
 Introduce signals and broadcasts using the JMain as it is intended
 to be used.
+
+===Start of nice java-api===
+
+tut8:
+Introduce the java-api and forget about the c-api again ;). Start playback
+using the new api
+
+tut9:
+Retreive the title for the current id and print it out using the sync-way
+
+tut10:
+Extend the java-api knowledge by receiving configval_list via sync methodcalls
+
+Tut11:
+Receive information for the current track via the async way
+
+Tut12:
+Receive Playlist and print all tracks once via sync and then via async calls
+
+tut13:
+Introduce the use of signals and broadcasts in the new api. Also use some errorchecking
+in the Xmms2Listener

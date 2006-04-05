@@ -65,7 +65,7 @@ public class Tut2 {
 		 * function and that's what we want ;). The values you wanted are on the first
 		 * element of the array.
 		 */
-		int id[] = new int[1];
+		long id[] = new long[1];
 		
 		connection = Xmmsclient.xmmsc_init ("tutorial2");
 		if (connection == null) {

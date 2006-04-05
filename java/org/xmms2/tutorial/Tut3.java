@@ -68,7 +68,7 @@ public class Tut3 {
 		 */
 		String val[] = new String[1];
 		int intval[] = new int[1];
-		int id[] = new int[1];
+		long id[] = new long[1];
 		
 		connection = Xmmsclient.xmmsc_init ("tutorial3");
 		if (connection == null) {
@@ -213,7 +213,7 @@ public class Tut3 {
 		
 		Xmmsclient.xmmsc_unref (connection);
 		
-		System.exit(1);
+		System.exit(0);
 	}
 	
 }

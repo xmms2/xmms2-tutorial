@@ -122,7 +122,7 @@ public class Tut7 extends CallbacksAdapter {
 		 * At this point the result struct is filled with the
 		 * answer. And we can now extract it as normal.
 		 */
-		int id[] = new int[1];
+		long id[] = new long[1];
 		
 		if (Xmmsclient.xmmsc_result_get_uint (resultx, id) != 1) {
 			System.err.println("Result didn't contain right type!");
@@ -147,7 +147,7 @@ public class Tut7 extends CallbacksAdapter {
 		 * we want to do some nifty things in a timer then.
 		 */
 		final SWIGTYPE_p_xmmsc_result_St resultx = Xmmsclient.getResultFromPointer(res);
-		int playtime[] = new int[1];
+		long playtime[] = new long[1];
 		Xmmsclient.xmmsc_result_get_uint(resultx, playtime);
 		
 		/*

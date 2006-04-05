@@ -199,7 +199,7 @@ public class Tut5 extends CallbacksAdapter{
 		 * but it's the only way it's possible.
 		 */
 		Xmmsclient.xmmsc_result_dict_foreach (result, 
-				XmmsclientConstants.CALLBACK_DICT_FOREACH_FUNCTION, new int[]{0});
+				XmmsclientConstants.CALLBACK_DICT_FOREACH_FUNCTION, 0);
 		Xmmsclient.xmmsc_result_unref (result);
 		
 		/*
@@ -213,7 +213,7 @@ public class Tut5 extends CallbacksAdapter{
 		
 		/* now call xmmsc_result_prop_dict_foreach instead! */
 		Xmmsclient.xmmsc_result_propdict_foreach (result, 
-				XmmsclientConstants.CALLBACK_PROPDICT_FOREACH_FUNCTION, new int[]{0});
+				XmmsclientConstants.CALLBACK_PROPDICT_FOREACH_FUNCTION, 0);
 		Xmmsclient.xmmsc_result_unref (result);
 		
 		Xmmsclient.xmmsc_unref (connection);
