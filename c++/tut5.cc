@@ -127,14 +127,14 @@ main()
 		 * Iterating over a dict is done by calling a callback function for
 		 * each entry in the dict.
 		 */
-		configlist.foreach( &my_dict_foreach );
+		configlist.each( &my_dict_foreach );
 
 		/* Now get a prop dict. Entry 1 should be the default clip
 		 * we ship so it should be safe to request information about it.
 		 *
 		 * Note that you can write the foreaching in one line like this.
 		 */
-		client.medialib.getInfo(1).foreach( &my_propdict_foreach );
+		client.medialib.getInfo(1).each( &my_propdict_foreach );
 
 	}
 	catch( Xmms::connection_error& err ) {

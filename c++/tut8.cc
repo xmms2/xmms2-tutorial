@@ -127,8 +127,8 @@ bool MyClient::my_get_info( const Xmms::PropDict& propdict )
 	 * extra data to the functions, in normal cases you should use
 	 * Xmms::bind functions which are provided for your convenience.
 	 */
-	propdict.foreach( boost::bind( &MyClient::my_propdict_foreach, this,
-	                               boost::ref(std::cout), _1, _2, _3 ) );
+	propdict.each( boost::bind( &MyClient::my_propdict_foreach, this,
+	                            boost::ref(std::cout), _1, _2, _3 ) );
 	g_main_loop_quit( ml_ );
 	return false;
 }
