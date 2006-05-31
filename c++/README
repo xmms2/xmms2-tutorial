@@ -1,0 +1,38 @@
+XMMS2 C++ client tutorials
+
+This directory contains sample C++ programs to help you learn about what's
+involved in writing an XMMS2 client. The C++ files provided are fully commented
+to explain the steps involved.
+
+=== Building ===
+To build a tutorial, run `make tutX` where 'X' is a tutorial number.
+Alternatively, run `make all` to build all tutorials.
+
+=== Tutorial Descriptions ===
+
+tut1:
+Will show how to connect to xmms2d and send a basic commands.
+
+tut2:
+Error handling.
+
+tut3:
+How to retrieve data from the medialib, and dealing with dicts. This example
+involves fetching the artist, title and bitrate of the currently playing
+song in XMMS2.
+
+tut4:
+How to retrieve the current playlist from the server and use the knowledge
+gained in tut3 to print it out.
+
+tut5:
+More on dicts and propdicts and foreaching dicts.
+
+tut6:
+Introduction to asynchronous clients, setting and receiving signals.
+
+tut7:
+GMainloop integration.
+
+tut8:
+Passing extra data to signal functions.
