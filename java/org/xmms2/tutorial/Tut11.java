@@ -18,8 +18,8 @@
 package org.xmms2.tutorial;
 
 import org.xmms2.Xmms2;
-import org.xmms2.Xmms2Adapter;
-import org.xmms2.Xmms2Event;
+import org.xmms2.events.Xmms2Adapter;
+import org.xmms2.events.Xmms2Event;
 import org.xmms2.Xmms2Exception;
 
 /**

@@ -17,18 +17,14 @@
 
 package org.xmms2.tutorial;
 
-import java.util.List;
-import java.util.ListIterator;
-
 import org.xmms2.Xmms2;
-import org.xmms2.Xmms2Adapter;
-import org.xmms2.Xmms2Event;
+import org.xmms2.events.Xmms2Adapter;
+import org.xmms2.events.Xmms2Event;
 import org.xmms2.Xmms2Exception;
 
 /**
  * That class simply inits and connects to xmms2, then sits there and prints playtime
- * via playtimeSignal until the playlist changes or some error occurs. You can
- * invoke a playlist change by e.g. shuffling the list.
+ * via playtimeSignal until some error occurs.
  */
 
 public class Tut13 {
@@ -80,23 +76,6 @@ public class Tut13 {
 						long sec = ((Long)e.value).longValue()/1000%60;
 						System.out.print("Playtime: " + ((min < 10)?"0":"") + min + ":" + 
 								((sec < 10)?"0":"") + sec + " min\r");
-					}
-				}
-				
-				/*
-				 * This update gets called on playlist changes or when you call playlistList()
-				 * As on every method in Xmms2Listener the tid is -1 on a broadcast and something
-				 * else on a usercall. The event is of type LIST_TYPE and this list contains
-				 * id's in the playlist
-				 */
-				public void xmms2PlaylistChanged(Xmms2Event e){
-					if (e.type.equals(LIST_TYPE)){
-						List m = (List)e.value;
-						for (ListIterator i = m.listIterator(); i.hasNext(); ){
-							System.out.println("Playlistindex " + i.nextIndex() + ": " + i.next());
-						}
-						instance[0].spinDown();
-						System.exit(0);
 					}
 				}
 				

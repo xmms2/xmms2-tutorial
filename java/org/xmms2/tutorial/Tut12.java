@@ -18,11 +18,12 @@
 package org.xmms2.tutorial;
 
 import java.util.Iterator;
-import java.util.List;
 
+import org.xmms2.Playlist;
 import org.xmms2.Xmms2;
-import org.xmms2.Xmms2Adapter;
-import org.xmms2.Xmms2Event;
+import org.xmms2.events.Xmms2Adapter;
+import org.xmms2.events.Xmms2Event;
+import org.xmms2.events.Xmms2PlaylistEvent;
 import org.xmms2.Xmms2Exception;
 
 /**
@@ -77,28 +78,26 @@ public class Tut12 {
 				 * via mlibGetTitleSync(), the second one via *Async() which is redirected to 
 				 * another listener method
 				 */
-				public void xmms2PlaylistChanged(Xmms2Event e){
-					if (e.tid != -1 && e.type.equals(LIST_TYPE)){
-						List l = (List)e.value;
-						System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<< PRINTING SYNC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-						for (Iterator i = l.iterator(); i.hasNext(); ){
-							counter++;
-							try {
-								System.out.println(instance[0].mlibGetTitleSync(((Long)i.next()).longValue()));
-								System.out.println("==========");
-							} catch (NumberFormatException e1) {
-								e1.printStackTrace();
-							} catch (Xmms2Exception e1) {
-								e1.printStackTrace();
-							}
+				public void xmms2PlaylistChanged(Xmms2PlaylistEvent e){
+					Playlist l = e.getPlaylist();
+					System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<< PRINTING SYNC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+					for (Iterator i = l.Iterator(); i.hasNext(); ){
+						counter++;
+						try {
+							System.out.println(instance[0].mlibGetTitleSync(((Long)i.next()).longValue()));
+							System.out.println("==========");
+						} catch (NumberFormatException e1) {
+							e1.printStackTrace();
+						} catch (Xmms2Exception e1) {
+							e1.printStackTrace();
 						}
-						System.out.println("\n\n<<<<<<<<<<<<<<<<<<<<<<<<< PRINTING ASYNC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-						for (Iterator i = l.iterator(); i.hasNext(); ){
-							try {
-								instance[0].mlibGetTitleAsync(((Long)i.next()).longValue());
-							} catch (NumberFormatException e1) {
-								e1.printStackTrace();
-							}
+					}
+					System.out.println("\n\n<<<<<<<<<<<<<<<<<<<<<<<<< PRINTING ASYNC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+					for (Iterator i = l.Iterator(); i.hasNext(); ){
+						try {
+							instance[0].mlibGetTitleAsync(((Long)i.next()).longValue());
+						} catch (NumberFormatException e1) {
+							e1.printStackTrace();
 						}
 					}
 				}
@@ -123,11 +122,6 @@ public class Tut12 {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
-		
-		/*
-		 * Call playlistList() to get the current playlist
-		 */
-		instance[0].playlistListAsync();
 	}
 	
 }

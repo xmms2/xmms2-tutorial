@@ -116,7 +116,8 @@ public class Tut6 extends CallbacksAdapter{
 		
 		result = Xmmsclient.xmmsc_playback_current_id (connection);
 		Xmmsclient.xmmsc_result_notifier_set (result, 
-				XmmsclientConstants.CALLBACK_PLAYBACK_ID, 0);
+				XmmsclientConstants.CALLBACK_PLAYBACK_ID, 
+				Xmmsclient.convertIntToVoidP(0));
 		Xmmsclient.xmmsc_result_unref (result);
 		
 		/*
