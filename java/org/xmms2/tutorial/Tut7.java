@@ -90,17 +90,6 @@ public class Tut7 extends CallbacksAdapter {
 		loop.setPlaybackPlaytimeSignal(0);
 		loop.setPlaybackCurrentIDCallback(0);
 		loop.start();
-		
-		/*
-		 * Let's kill that thing after 20s, it's really enough then ;)
-		 */
-		new Timer().schedule(new TimerTask(){
-			public void run() {
-				loop.spinDown();
-				Xmmsclient.xmmsc_unref(connection);
-				System.exit(0);
-			}
-		}, 20000);
 	}
 	
 	/*
@@ -153,7 +142,10 @@ public class Tut7 extends CallbacksAdapter {
 		/*
 		 * Let's print the signal
 		 */
-		System.out.println(playtime[0] + "ms");
+		long min = playtime[0]/60000;
+		long sec = playtime[0]/1000%60;
+		System.out.print("Playtime: " + ((min < 10)?"0":"") + min + ":" + 
+				((sec < 10)?"0":"") + sec + " min\r");
 		
 		/*
 		 * Since signals occur really really often we are happy with less of them.

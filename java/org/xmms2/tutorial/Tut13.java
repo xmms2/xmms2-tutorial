@@ -45,6 +45,7 @@ public class Tut13 {
 			e.printStackTrace();
 			System.exit(2);
 		}
+		
 		/*
 		 * Let's initialize a array of Xmms2 with length 1 and set it final. Sounds weird
 		 * at first look but makes sense after some explanation. We call spinDown() on
@@ -75,7 +76,10 @@ public class Tut13 {
 				 */
 				public void xmms2PlaytimeSignal(Xmms2Event e){
 					if (e.type.equals(LONG_TYPE)){
-						System.out.println("Playtime: " + e.value);
+						long min = ((Long)e.value).longValue()/60000;
+						long sec = ((Long)e.value).longValue()/1000%60;
+						System.out.print("Playtime: " + ((min < 10)?"0":"") + min + ":" + 
+								((sec < 10)?"0":"") + sec + " min\r");
 					}
 				}
 				
@@ -121,6 +125,6 @@ public class Tut13 {
 		
 		/*
 		 * Sit and wait
-		 */
-	}	
+		 */	  
+	}
 }
