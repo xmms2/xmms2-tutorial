@@ -29,6 +29,7 @@ import org.xmms2.Title;
  */
 
 public class JutorialMlibNode extends DefaultMutableTreeNode {
+	private static final long serialVersionUID = -7603090724447958308L;
 	private int level = 0;
 	private String name = "";
 	private boolean queried = false;

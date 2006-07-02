@@ -63,9 +63,11 @@ public class JutorialListener implements Xmms2Listener {
     	if (ev.type.equals(LIST_TYPE)) {
     		List l = (List) ev.value;
     		List tmp = new ArrayList();
-    		if (cli.mlibQueryQueue.size() > 0){
-    			JutorialMlibNode node = (JutorialMlibNode)cli.mlibQueryQueue.get(0);
-    			cli.mlibQueryQueue.remove(0);
+    		// Let's check if our queryQueue contains the given tid
+    		// If so we can proceed and hang the data in
+    		if (cli.mlibQueryQueue.containsKey(new Integer(ev.tid))){
+    			JutorialMlibNode node = (JutorialMlibNode)cli.mlibQueryQueue.get(new Integer(ev.tid));
+    			cli.mlibQueryQueue.remove(new Integer(ev.tid));
     			for (Iterator it = l.iterator(); it.hasNext();) {
     				Dict m = (Dict) it.next();
     				if (node.getLevel() <= 1){
@@ -101,19 +103,17 @@ public class JutorialListener implements Xmms2Listener {
     /**
      * Merge or set the configs and call update on the MlibDataModel
      */
-    public void xmms2ConfigvalChanged(Xmms2Event ev) {
-    	if (ev.type.equals(DICT_TYPE)) {
-    		if (cli.configValues == null)
-    			cli.configValues = (Dict)ev.value;
-    		else {
-    			Dict tmp = (Dict)ev.value;
-    			for (Iterator i = tmp.keySet().iterator(); i.hasNext(); ){
-    				String key = (String)i.next();
-    				cli.configValues.putDictEntry(key, tmp.getDictEntry(key));
-    			}
+    public void xmms2ConfigvalChanged(Xmms2ConfigEvent ev) {
+    	if (cli.configValues == null)
+    		cli.configValues = ev.getConfigs();
+    	else {
+    		Dict tmp = ev.getConfigs();
+    		for (Iterator i = tmp.keySet().iterator(); i.hasNext(); ){
+    			String key = (String)i.next();
+    			cli.configValues.putDictEntry(key, tmp.getDictEntry(key));
     		}
-            cli.configModel.update();
-        }
+    	}
+    	cli.configModel.update();
     }
 
     public void xmms2PlaybackStatusChanged(Xmms2Event ev) {
@@ -164,11 +164,9 @@ public class JutorialListener implements Xmms2Listener {
     /**
      * This method updates the playlist table if it contains the updated title
      */
-    public void xmms2TitleChanged(Xmms2Event ev) {
-        if (ev.type.equals(TITLE_TYPE)){
-        	if (cli.xmms2.getPlaylist().indicesOfID(((Title)ev.value).getID()).size() > 0)
-        		cli.dataModel.update();
-        }
+    public void xmms2TitleChanged(Xmms2TitleEvent ev) {
+    	if (cli.xmms2.getPlaylist().indicesOfID(ev.getTitle().getID()).size() > 0)
+    		cli.dataModel.update();
     }
 
     public void xmms2MediareaderStatusChanged(Xmms2Event ev) {

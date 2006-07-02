@@ -22,8 +22,8 @@ import java.util.Iterator;
 import org.xmms2.Playlist;
 import org.xmms2.Xmms2;
 import org.xmms2.events.Xmms2Adapter;
-import org.xmms2.events.Xmms2Event;
 import org.xmms2.events.Xmms2PlaylistEvent;
+import org.xmms2.events.Xmms2TitleEvent;
 import org.xmms2.Xmms2Exception;
 
 /**
@@ -105,10 +105,10 @@ public class Tut12 {
 				/*
 				 * That method gets called when we call mlibGetTitleAsync e.g.
 				 */
-				public void xmms2TitleChanged(Xmms2Event e){
-					if (e.tid != -1 && e.type.equals(TITLE_TYPE)){
+				public void xmms2TitleChanged(Xmms2TitleEvent e){
+					if (e.tid != -1){
 						counter--;
-						System.out.println(e.value);
+						System.out.println(e.getTitle());
 						System.out.println("===========");
 						if (counter <= 0){
 							instance[0].spinDown();

@@ -20,8 +20,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -45,13 +44,14 @@ import org.xmms2.Xmms2;
  */
 
 public class JutorialClient extends JFrame{
+	private static final long serialVersionUID = -4203845135871927091L;
 	protected Xmms2 xmms2;
 	protected JTable playlist, configs;
 	protected JLabel playtime;
 	protected PlaylistDataModel dataModel;
 	protected MlibTreeModel mlibModel;
 	protected JTree mlib;
-	protected List mlibQueryQueue;
+	protected HashMap mlibQueryQueue;
 	protected JProgressBar mediareader, volume;
 	protected ArrayList treeSelection;
 	protected Dict configValues;
@@ -79,7 +79,7 @@ public class JutorialClient extends JFrame{
 			 * Create some Lists which are needed for querying the mlib and
 			 * remember the treeselections
 			 */
-			mlibQueryQueue = new LinkedList();
+			mlibQueryQueue = new HashMap();
 			treeSelection = new ArrayList();
 			
 			/*
@@ -188,9 +188,10 @@ public class JutorialClient extends JFrame{
 	 */
 	private void queryNode(JutorialMlibNode node){
 		if (!node.isQueried() && !node.isLeaf()){
-			mlibQueryQueue.add(node);
+			// Remember the tid of our query and store the node where the received data
+			// should be hung in then
+			mlibQueryQueue.put(new Integer(xmms2.mlibSelectAsync(node.getQuery())), node);
 			node.setQueried(true);
-			xmms2.mlibSelectAsync(node.getQuery());
 		}
 	}
 
@@ -204,6 +205,8 @@ public class JutorialClient extends JFrame{
      * we want to put into a row etc.
      */
     class ConfigDataModel extends AbstractTableModel {
+		private static final long serialVersionUID = 4587561387054941153L;
+		
 		public int getRowCount() {
 			if (configValues != null)
 				return configValues.size();
@@ -292,7 +295,9 @@ public class JutorialClient extends JFrame{
      * a tree, what else ;))
      */
     class MlibTreeModel extends DefaultTreeModel {
-    	MlibTreeModel(){
+		private static final long serialVersionUID = -2224453735382966307L;
+		
+		MlibTreeModel(){
     		super(new JutorialMlibNode("Xmms2 Medialib", null, null));
     	}
 		public Object getChild(Object arg0, int arg1) {
@@ -327,16 +332,5 @@ public class JutorialClient extends JFrame{
 			}
 			fireTreeNodesInserted(node, node.getPath(), indices, node.getChildren().toArray());
 		}
-    }
-    
-    /**
-     * That listener is quite important to have a performant mlib-treeview. It updates
-     * the tree on demand if someone's going to expand parts of it
-     */
-    private class MlibListener implements TreeWillExpandListener {
-		public void treeWillExpand(TreeExpansionEvent arg0) throws ExpandVetoException {
-			queryNode((JutorialMlibNode)arg0.getSource());
-		}
-		public void treeWillCollapse(TreeExpansionEvent arg0) throws ExpandVetoException {}
     }
 }

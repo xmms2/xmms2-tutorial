@@ -18,8 +18,8 @@
 package org.xmms2.tutorial;
 
 import java.util.Arrays;
-import java.util.Map;
 
+import org.xmms2.Dict;
 import org.xmms2.Xmms2;
 import org.xmms2.Xmms2Exception;
 
@@ -70,7 +70,7 @@ public class Tut10 {
 		 * Call configvalList() to get all configs from xmms2
 		 */
 		try {
-			Map configs = instance[0].configvalListSync();
+			Dict configs = instance[0].configvalListSync();
 			String keys[] = (String[])configs.keySet().toArray(new String[0]);
 			Arrays.sort(keys);
 			for (int i = 0; i < keys.length; i++){
@@ -79,7 +79,7 @@ public class Tut10 {
 			}
 		} catch (Xmms2Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			instance[0].spinDown();
 			System.exit(0);
 		}

@@ -29,7 +29,7 @@ import org.xmms2.Xmms2;
  */
 
 public class JutorialMenuBar extends JMenuBar {
-
+	private static final long serialVersionUID = 2639762715008311337L;
 	private Xmms2 xmms2;
 	private JutorialClient cli;
 	

@@ -20,6 +20,7 @@ package org.xmms2.tutorial;
 import org.xmms2.Xmms2;
 import org.xmms2.events.Xmms2Adapter;
 import org.xmms2.events.Xmms2Event;
+import org.xmms2.events.Xmms2TitleEvent;
 import org.xmms2.Xmms2Exception;
 
 /**
@@ -89,12 +90,10 @@ public class Tut11 {
 				 * never reached but you get an id of 0 and output No such entry, 0
 				 * you aren't in mode playing.
 				 */
-				public void xmms2TitleChanged(Xmms2Event e){
-					if (e.type.equals(TITLE_TYPE)){
-						System.out.print(e);
-						instance[0].spinDown();
-						System.exit(0);
-					}
+				public void xmms2TitleChanged(Xmms2TitleEvent e){
+					System.out.print(e.getTitle());
+					instance[0].spinDown();
+					System.exit(0);
 				}
 			});
 			
