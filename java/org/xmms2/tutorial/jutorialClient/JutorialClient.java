@@ -16,6 +16,7 @@
 
 package org.xmms2.tutorial.jutorialClient;
 
+import java.awt.Dimension;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -109,6 +110,7 @@ public class JutorialClient extends JFrame{
 			volume = new JProgressBar(SwingConstants.VERTICAL);
 			volume.setMaximum(100);
 			volume.setStringPainted(true);
+			volume.setMinimumSize(new Dimension(15, 100));
 			volume.addMouseWheelListener(new MouseWheelListener(){
 				public void mouseWheelMoved(MouseWheelEvent arg0) {
 					int newval = volume.getValue()-arg0.getUnitsToScroll();
@@ -254,17 +256,19 @@ public class JutorialClient extends JFrame{
 		public int getColumnCount() { 
 			return 4; 
 		}
-    	public Object getValueAt(int row, int col) {
-    		Title t = xmms2.getPlaylist().titleAt(row);
-    		if ( t == null && col != 0)
-    			return "";
-    		switch (col){
-    		case 0: return ""+(row+1);
-    		case 1: return t.getFirstAttribute("title").getValue();
-    		case 2: return t.getFirstAttribute("artist").getValue();
-    		case 3: return t.getFirstAttribute("album").getValue();
-    		default: return "";
-    		}
+		public Object getValueAt(int row, int col) {
+			if (row < xmms2.getPlaylist().length()){
+				Title t = xmms2.getPlaylist().titleAt(row);
+				if ( t == null && col != 0)
+					return "";
+				switch (col){
+					case 0: return ""+(row+1);
+					case 1: return t.getFirstAttribute("title").getValue();
+					case 2: return t.getFirstAttribute("artist").getValue();
+					case 3: return t.getFirstAttribute("album").getValue();
+				}
+			}
+			return "";
     	}
     	public String getColumnName(int arg0) {
     		switch (arg0){

@@ -96,9 +96,11 @@ public class JutorialMlibNode extends DefaultMutableTreeNode {
 	public String addMeQuery(){
 		switch (level){
 		case 0: return "SELECT DISTINCT id FROM Media WHERE key='url'";
-		case 1: return "SELECT DISTINCT m2.id FROM Media m1 JOIN Media m2 on " +
-		"m1.id = m2.id WHERE m1.key='artist' " +
-		"AND m1.value LIKE '%" + name + "%' AND m2.key='album'";
+		case 1: return "SELECT DISTINCT id FROM Media WHERE key='artist' " +
+		"AND value LIKE '%" + name + "%'";
+		case 2: return "SELECT DISTINCT m2.id FROM Media m1 JOIN Media m2 on " +
+		"m1.id = m2.id WHERE m1.key='artist' AND m1.value LIKE '%" + parent + "%' " +
+		"AND m2.key='album' AND m2.value LIKE '%" + name + "%'";
 		default: return "";
 		}
 	}
