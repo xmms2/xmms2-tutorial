@@ -89,7 +89,7 @@ public class JutorialMenuBar extends JMenuBar {
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int returnVal = chooser.showOpenDialog(cli);
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					xmms2.mlibPathImport("file://" + chooser.getSelectedFile());
+					xmms2.mlibPathImport(""+chooser.getSelectedFile());
 				}
 			}
 			else if (arg0.getSource().equals(addURL)){
