@@ -19,6 +19,8 @@ package org.xmms2.tutorial.jutorialClient;
 import java.awt.Dimension;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -68,10 +70,13 @@ public class JutorialClient extends JFrame{
 			try {
 				xmms2 = Xmms2.getInstance("Jutorial");
 				xmms2.addXmms2Listener(new JutorialListener(this));
-				xmms2.setConnectionParams("tcp://127.0.0.1:7777");
+				String ipcpath = JOptionPane.showInputDialog(this, "Enter XMMS_PATH (empty for default):");
+				xmms2.setConnectionParams(ipcpath);
 				xmms2.connect();
 				xmms2.enableBroadcasts();
 			} catch (Throwable e) {
+				JOptionPane.showMessageDialog(this, 
+						"We were unable to connect to xmms2d:\n" + e.getMessage());
 				e.printStackTrace();
 				System.exit(1);
 			}
@@ -166,6 +171,17 @@ public class JutorialClient extends JFrame{
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setSize(800, 600);
 			setJMenuBar(new JutorialMenuBar(this, xmms2));
+			
+			/*
+			 * Add a WindowListener which listenes on WindowEvents (especially
+			 * windowClosing). Then we are going to spin xmms2 down and let the
+			 * window close.
+			 */
+			addWindowListener(new WindowAdapter(){
+				public void windowClosing(WindowEvent arg0) {
+					xmms2.spinDown();
+				}
+			});
 			
 			/*
 			 * Update startup data
