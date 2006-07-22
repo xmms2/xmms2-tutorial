@@ -27,11 +27,11 @@ package org.xmms2.tutorial;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.xmms2.CallbacksAdapter;
-import org.xmms2.JMain;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
-import org.xmms2.xmms2bindings.Xmmsclient;
+import org.xmms2.wrapper.CallbacksAdapter;
+import org.xmms2.wrapper.JMain;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
+import org.xmms2.wrapper.xmms2bindings.Xmmsclient;
 
 /**
  * This class works with a Mainloop. We don't get data directly from the server,

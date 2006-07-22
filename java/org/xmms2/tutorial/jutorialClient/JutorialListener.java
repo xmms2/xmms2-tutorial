@@ -23,8 +23,8 @@ import java.util.List;
 import org.xmms2.Dict;
 import org.xmms2.Playlist;
 import org.xmms2.Title;
+import org.xmms2.Xmms2Constants;
 import org.xmms2.events.*;
-import org.xmms2.xmms2bindings.xmms_playback_status_t;
 
 /**
  * This class is the controller for the ui (JutorialClient). It updates
@@ -32,7 +32,6 @@ import org.xmms2.xmms2bindings.xmms_playback_status_t;
  * Xmms2Listener but doesn't use all of its methods.
  */
 public class JutorialListener implements Xmms2Listener {
-	
 	private JutorialClient cli;
 	private long oldMediareaderCnt = 0;
 	
@@ -71,7 +70,7 @@ public class JutorialListener implements Xmms2Listener {
     			for (Iterator it = l.iterator(); it.hasNext();) {
     				Dict m = (Dict) it.next();
     				if (node.getLevel() <= 1){
-    					if (m.get("value") != null && !m.get("value").equals("")){
+    					if (m.get("value") != null){
     						if (!tmp.contains(m.getDictEntry("value"))){
     							tmp.add(m.getDictEntry("value"));
     							JutorialMlibNode n = new JutorialMlibNode(m.getDictEntry("value"), node, null);
@@ -117,8 +116,9 @@ public class JutorialListener implements Xmms2Listener {
     }
 
     public void xmms2PlaybackStatusChanged(Xmms2Event ev) {
-        if (((Long)ev.value).longValue() == 
-        	xmms_playback_status_t.XMMS_PLAYBACK_STATUS_STOP.swigValue() && cli.playtime != null) {
+    	cli.playbackStatus = ((Long)ev.value).intValue();
+        if (cli.playbackStatus == Xmms2Constants.PLAYBACK_IDLE 
+        		&& cli.playtime != null) {
         	cli.playtime.setText("");
         }
     }

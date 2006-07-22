@@ -23,13 +23,13 @@ package org.xmms2.tutorial;
  * xmmsc_result_value_type_t defines some identifiers, org.xmms2.xmms2bindings.XmmsclientConstants
  * defines our callbackmethods.
  */
-import org.xmms2.CallbacksAdapter;
-import org.xmms2.SpecialJNI;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
-import org.xmms2.xmms2bindings.Xmmsclient;
-import org.xmms2.xmms2bindings.XmmsclientConstants;
-import org.xmms2.xmms2bindings.xmmsc_result_value_type_t;
+import org.xmms2.wrapper.CallbacksAdapter;
+import org.xmms2.wrapper.SpecialJNI;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
+import org.xmms2.wrapper.xmms2bindings.Xmmsclient;
+import org.xmms2.wrapper.xmms2bindings.XmmsclientConstants;
+import org.xmms2.wrapper.xmms2bindings.xmmsc_result_value_type_t;
 
 /**
  * This class works with dict_foreach and propdict_foreach. For this to work in java

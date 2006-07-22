@@ -21,9 +21,9 @@ package org.xmms2.tutorial;
  * That's usually the smalled includeset to use if you are using the c-like api
  */
 
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
-import org.xmms2.xmms2bindings.Xmmsclient;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
+import org.xmms2.wrapper.xmms2bindings.Xmmsclient;
 
 /**
  * That class simply inits and connects to xmms2, then gets the current id and

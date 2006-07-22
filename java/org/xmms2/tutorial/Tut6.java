@@ -23,12 +23,12 @@ package org.xmms2.tutorial;
  * got it
  */
 
-import org.xmms2.CallbacksAdapter;
-import org.xmms2.JMain;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
-import org.xmms2.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
-import org.xmms2.xmms2bindings.Xmmsclient;
-import org.xmms2.xmms2bindings.XmmsclientConstants;
+import org.xmms2.wrapper.CallbacksAdapter;
+import org.xmms2.wrapper.JMain;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
+import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
+import org.xmms2.wrapper.xmms2bindings.Xmmsclient;
+import org.xmms2.wrapper.xmms2bindings.XmmsclientConstants;
 
 /**
  * This class works with a notifier and therefor with a Mainloop. The code is async, which

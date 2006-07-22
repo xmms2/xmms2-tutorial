@@ -59,6 +59,7 @@ public class JutorialClient extends JFrame{
 	protected ArrayList treeSelection;
 	protected Dict configValues;
 	protected ConfigDataModel configModel;
+	protected int playbackStatus = -1;
 	
 	private JutorialClient(){
 		super("JutorialClient");
@@ -188,6 +189,7 @@ public class JutorialClient extends JFrame{
 			 */
 			xmms2.volumeGetAsync();
 			xmms2.configvalListAsync();
+			xmms2.getPlaybackStatusAsync();
 			
 			/*
 			 * Show me your boobs, babe!

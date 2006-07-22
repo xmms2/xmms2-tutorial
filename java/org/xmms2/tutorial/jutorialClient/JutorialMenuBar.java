@@ -22,6 +22,7 @@ import java.util.Iterator;
 import javax.swing.*;
 
 import org.xmms2.Xmms2;
+import org.xmms2.Xmms2Constants;
 
 /**
  * This class is just off of the rest cause JutorialClient 
@@ -77,10 +78,16 @@ public class JutorialMenuBar extends JMenuBar {
 				xmms2.stop();
 			else if (arg0.getSource().equals(pause))
 				xmms2.pause();
-			else if (arg0.getSource().equals(next))
+			else if (arg0.getSource().equals(next)) {
 				xmms2.next();
-			else if (arg0.getSource().equals(prev))
+				if (cli.playbackStatus == Xmms2Constants.PLAYBACK_PLAYING) 
+					xmms2.tickle();
+			}
+			else if (arg0.getSource().equals(prev)){
 				xmms2.prev();
+				if (cli.playbackStatus == Xmms2Constants.PLAYBACK_PLAYING) 
+					xmms2.tickle();
+			}
 			else if (arg0.getSource().equals(rehash))
 				xmms2.mlibRehash(0);
 			else if (arg0.getSource().equals(addPath)){
