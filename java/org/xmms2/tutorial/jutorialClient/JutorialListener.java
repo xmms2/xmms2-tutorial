@@ -48,7 +48,7 @@ public class JutorialListener implements Xmms2Listener {
     }
 
     public void xmms2ErrorOccured(Xmms2Event ev) {
-        System.err.println("Xmms2 throw an error: " + ev.value);
+        System.err.println("Xmms2 threw an error: " + ev.value);
     }
 
     /**

@@ -24,7 +24,6 @@ package org.xmms2.tutorial;
  * defines our callbackmethods.
  */
 import org.xmms2.wrapper.CallbacksAdapter;
-import org.xmms2.wrapper.SpecialJNI;
 import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_connection_St;
 import org.xmms2.wrapper.xmms2bindings.SWIGTYPE_p_xmmsc_result_St;
 import org.xmms2.wrapper.xmms2bindings.Xmmsclient;
@@ -33,7 +32,8 @@ import org.xmms2.wrapper.xmms2bindings.xmmsc_result_value_type_t;
 
 /**
  * This class works with dict_foreach and propdict_foreach. For this to work in java
- * your class has to implement org.xmms2.CallbacksListener and call org.xmms2.SpecialJNI.setENV()
+ * your class has to implement org.xmms2.CallbacksListener and call 
+ * org.xmms2.wrapper.xmms2bindings.Xmmsclient.setENV()
  * with itself as argument. Otherwise nothing happens. We get a list of configvals which is handled
  * by dict_foreach and some medialib_info for a given id which is handled by propdict_foreach
  */
@@ -158,7 +158,7 @@ public class Tut5 extends CallbacksAdapter{
 		 * above the callbacks only work this way and not anyhow else.
 		 */
 		Tut5 tut5 = new Tut5();
-		SpecialJNI.setENV(tut5);
+		Xmmsclient.setENV(tut5);
 		
 		/*
 		 * In tut3 we learned about dicts. But there is more to known on this
