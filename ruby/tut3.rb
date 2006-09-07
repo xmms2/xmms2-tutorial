@@ -50,18 +50,20 @@ begin
 			info = xmms.medialib_get_info(id).wait.value
 			puts "Server mediainfo for ID: #{id}"
 
-			# Medialib info is arranged by "sources" which define where the
-			# mediainfo came from. The server source contains all the info that
-			# has been extracted on an entry by the daemon. Beneath this and all
-			# sources lies another hash containing the actual mediainfo.
-			info[:server].each_pair do |key, val|
-				# This will print out each key/value pair in the Hash returned
-				# by the medialib_get_info call. The puts statement is arranged
-				# this way as a reminder to keep your types straight. The keys
-				# in the mediainfo Hash are all symbols, which will cause an
-				# error if one tries to print them. The values are a mix of
-				# Fixnums, Strings, and more Hashes
-				puts key.to_s + ' => ' + val.to_s
+			# The value we just retrieved is a so-called "propdict"
+			# (property dictionary).
+			# In propdicts, every entry has a source, a key and a value
+			# property.
+			# Decoder plugins store the tags they read with source set to
+			# "plugin/name" so e.g. the vorbis plugin will store its tags in
+			# "plugin/vorbis".
+			# Any key can be present in any number of sources, so you could
+			# have an "artist" property with source set to plugin/vorbis and
+			# an "artist" property with source set to plugin/mad.
+			info.each_pair do |src, key, val|
+				# This will print out each src/key/value pair in the propdict
+				# returned by the medialib_get_info call.
+				puts "[#{src}] #{key} = #{val}"
 			end
 		rescue Xmms::Result::ValueError
 			puts 'There was an error retrieving mediainfo for the current ID.'
