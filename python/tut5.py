@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #  XMMS2 - X Music Multiplexer System
 #  Copyright (C) 2003-2006 XMMS2 Team
 # 
