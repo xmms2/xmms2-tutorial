@@ -28,16 +28,23 @@ rescue Xmms::Client::ClientError
 end
 
 begin
-	# The C API differentiates between 2 data types called dicts and propdicts.
-	# The Ruby API turns either of these into plain Hashes. Tutorials 3 and 4
-	# already showed how to work with these, so there is nothing new here.
+	# Tutorials 3 and 4 already showed how to work with propdicts, so there is
+	# nothing new here.
 	# This tutorial just prints a list of sources on the current entry. (Most
 	# people will only see "server" but those who have run some other clients
 	# may see other sources."
 	id = xmms.playback_current_id.wait.value
 
-	xmms.medialib_get_info(id).wait.value.each_key do |source|
-		puts source.to_s
+	sources = []
+
+	xmms.medialib_get_info(id).wait.value.each_key do |source, key|
+		sources << source
+	end
+
+	# Most sources will have more than one entry, but we only want to show them
+	# once.
+	sources.uniq.each do |source|
+		puts source
 	end
 rescue Xmms::Result::ValueError
 	puts 'There was an error retrieving mediainfo for a playlist entry.'

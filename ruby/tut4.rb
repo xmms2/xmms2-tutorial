@@ -41,12 +41,14 @@ begin
 
 		# After running tutorial 3, you saw there is really a lot of mediainfo
 		# for just one entry. So just print out the URL for each playlist entry
-		# here so the screen isn't flooded.
-		# By now you've probably noticed that all the hash symbols are lower-
+		# here so the screen isn't flooded. Note that we don't need to specify
+		# the source for the propdict entry - there's only one URL anyway,
+		# so the propdict can figure it out by itself.
+		# By now you've probably noticed that all the propdict keys are lower-
 		# case. This is just to make retrieval of such values more uniform.
 		# (Having keys like :url and :URL would be confusing, no?)
 		# Remember, the playlist array is zero-indexed!
-		puts "#{index + 1}. #{xmms.medialib_get_info(id).wait.value[:server][:url]}"
+		puts "#{index + 1}. #{xmms.medialib_get_info(id).wait.value[:url]}"
 	end
 rescue Xmms::Result::ValueError
 	puts 'There was an error retrieving mediainfo for a playlist entry.'
