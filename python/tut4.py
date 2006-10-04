@@ -69,11 +69,11 @@ except IOError, detail:
 	sys.exit(1)
 
 """
-So let's look at lists. Lists can only contain
-one type of values. So you either have a list
-of strings, a list of ints or a list of uints.
-In this case we ask for the whole current playlist.
-It will return a result with a list of uints.
+So let's look at lists. Lists returned from xmms2d
+can only contain one type of values. So you either
+have a list of strings, a list of ints or a list of
+uints. In this case we ask for the whole current
+playlist. It will return a result with a list of uints.
 Each uint is the id number of the entry.
 
 The playlist has two important numbers: the entry
