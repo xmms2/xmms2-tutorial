@@ -23,7 +23,7 @@
 #include <cstdlib>
 #include <iostream>
 
-// for glib mainloop
+// for glib mainloop - glibmm/gtkmm works also
 #include <glib.h>
 
 // Look at tutorial 6 for this.
@@ -49,7 +49,7 @@ main()
 
 		// If callback function is just a normal function, there's no
 		// need for binding anything.
-		client.playback.currentID( &my_current_id, &error_handler );
+		client.playback.currentID()( &my_current_id, &error_handler );
 
 		/*
 		 * Set the mainloop we're about to use, after this you can't call

@@ -86,7 +86,7 @@ main()
 		 *
 		 * First we ask for the playlist.
 		 */
-		Xmms::List< unsigned int > list = client.playlist.list();
+		Xmms::List< unsigned int > list = client.playlist.listEntries();
 
 		/*
 		 * Now iterate the list.

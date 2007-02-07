@@ -134,7 +134,7 @@ main()
 		 *
 		 * Note that you can write the foreaching in one line like this.
 		 */
-		client.medialib.getInfo(1).each( &my_propdict_foreach );
+		static_cast< Xmms::PropDict >(client.medialib.getInfo(1)).each( &my_propdict_foreach );
 
 	}
 	catch( Xmms::connection_error& err ) {

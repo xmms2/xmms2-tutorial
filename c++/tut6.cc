@@ -28,8 +28,6 @@ class MyClient
 		MyClient();
 		~MyClient();
 
-		// Callback functions
-
 		/*
 		 * Here's our callback function declarations.
 		 * Note that a callback function must return a bool.
@@ -57,11 +55,19 @@ MyClient::MyClient() : client_( "tutorial6" )
 	 * async client works with callbacks. When you send a command you need
 	 * to set a callback for it.
 	 *
-	 * Asynchronous functions are overloaded versions of the synchronous
-	 * counterparts, which take two extra arguments, callback function
-	 * and error callback function which gets called if there was an error.
-	 * The error callback is optional and it defaults to returning false
-	 * which will just stop a signal/broadcast.
+	 * Using asynchronous functions works almost the same way as the
+	 * synchronous versions - in fact the function used is the same.
+	 * The difference is the way you use the return value of a function.
+	 * All clientlib functions actually return an adapter class which
+	 * implicitly converts into a value in synchronous mode. This adapter
+	 * class is also used to bind callback functions which are then called
+	 * later with the result from the function you originally called.
+	 *
+	 * Callback functions can be set iwth operator() of the adapter class
+	 * (which also finishes the call, you can't add more callbacks afterwards)
+	 * or with connect() and connectError() functions. If you use connect*
+	 * functions or don't want to bind any callback functions, just use
+	 * operator() with no arguments to finish the call,
 	 *
 	 * You can set normal functions and member functions as callback,
 	 * but there is a special syntax for member function pointers.
@@ -72,8 +78,8 @@ MyClient::MyClient() : client_( "tutorial6" )
 	 * Normal functions and static member functions can be bound with
 	 * just &my_function, like any other function pointer.
 	 */
-	client_.playback.currentID( Xmms::bind( &MyClient::my_current_id, this ),
-	                            Xmms::bind( &MyClient::error_handler, this ) );
+	client_.playback.currentID()( Xmms::bind( &MyClient::my_current_id, this ),
+	                              Xmms::bind( &MyClient::error_handler, this ) );
 
 	/*
 	 * xmmsclient++ has its own mainloop which you can use if you don't

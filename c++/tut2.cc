@@ -60,11 +60,6 @@ main()
 	 * an Xmms::connection_error.
 	 *
 	 * As every good C++ coder knows, always catch exceptions by reference.
-	 *
-	 * Actually, std::logic_error might be thrown by std::string
-	 * constructor here if getenv returns 0 - that is, the
-	 * environment variable doesn't exist. It's generally a good idea
-	 * to check that first.
 	 */
 	catch( Xmms::connection_error& err ) {
 
@@ -80,6 +75,13 @@ main()
 
 	try {
 
+		/*
+		 * To fetch the current playing id we use this method.
+		 * Xmms::Playback::currentID() (and all others) actually
+		 * returns a special class which implicitly converts to
+		 * the appropriate type in synchronous mode. This will
+		 * be handled in detail in later tutorials.
+		 */
 		unsigned int id = client.playback.currentID();
 		std::cout << "Currently playing ID is " << id << std::endl;
 

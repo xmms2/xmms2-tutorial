@@ -81,10 +81,10 @@ MyClient::MyClient() : client_( "tutorial8" ), ml_( 0 )
 	 *                                         // argument when calling the
 	 *                                         // signal.
 	 */
-	client_.playback.currentID( Xmms::bind( &MyClient::my_current_id, this ),
-	                            boost::bind( &MyClient::error_handler, this,
-	                                         "client.playback.currentID()", _1 )
-	                          );
+	client_.playback.currentID()( Xmms::bind( &MyClient::my_current_id, this ),
+	                              boost::bind( &MyClient::error_handler, this,
+	                                           "client.playback.currentID()", _1 )
+	                            );
 
 	// Set mainloop and roll~
 	client_.setMainloop( new Xmms::GMainloop( client_.getConnection() ) );
@@ -102,9 +102,13 @@ bool MyClient::my_current_id( const unsigned int& id )
 
 	// Let's request info for this entry, look above for comments on
 	// the boost::bind part.
-	client_.medialib.getInfo( id, Xmms::bind( &MyClient::my_get_info, this ),
-	                          boost::bind( &MyClient::error_handler, this,
-	                                       "client.medialib.getInfo()", _1 ) );
+	Xmms::PropDictResult res = client_.medialib.getInfo( id );
+	// connect callbacks
+	res.connect( Xmms::bind( &MyClient::my_get_info, this ) );
+	res.connectError( boost::bind( &MyClient::error_handler, this,
+	                               "client.medialib.getInfo()", _1 ) );
+	// finish the call
+	res();
 
 	return false;
 }
