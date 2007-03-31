@@ -134,7 +134,7 @@ main (int argc, char **argv)
 	 * Dicts can't be extracted, but we can extract
 	 * entries from the dict, like this:
 	 */
-	if (!xmmsc_result_get_dict_entry_str (result, "artist", &val)) {
+	if (!xmmsc_result_get_dict_entry_string (result, "artist", &val)) {
 		/*
 		 * if we end up here it means that the key "artist" wasn't
 		 * in the dict or that the value for "artist" wasn't a
@@ -154,7 +154,7 @@ main (int argc, char **argv)
 	/* print the value */
 	printf ("artist = %s\n", val);
 
-	if (!xmmsc_result_get_dict_entry_str (result, "title", &val)) {
+	if (!xmmsc_result_get_dict_entry_string (result, "title", &val)) {
 		val = "No Title";
 	}
 	printf ("title = %s\n", val);
@@ -162,7 +162,7 @@ main (int argc, char **argv)
 	/*
 	 * Let's extract an integer as well
 	 */
-	if (!xmmsc_result_get_dict_entry_int32 (result, "bitrate", &intval)) {
+	if (!xmmsc_result_get_dict_entry_int (result, "bitrate", &intval)) {
 		intval = 0;
 	}
 	printf ("bitrate = %i\n", intval);

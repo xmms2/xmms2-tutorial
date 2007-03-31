@@ -62,6 +62,8 @@ my_dict_foreach (const void *key, xmmsc_result_value_type_t type,
 				printf ("%s = %s\n", k, val);
 				break;
 			}
+		default:
+			break;
 	}
 
 }
@@ -108,6 +110,8 @@ my_propdict_foreach (const void *key, xmmsc_result_value_type_t type,
 				printf ("%s:%s = %s\n", source, k, val);
 				break;
 			}
+		default:
+			break;
 	}
 
 }

@@ -48,18 +48,18 @@ get_mediainfo (xmmsc_connection_t *connection,
 		exit (EXIT_FAILURE);
 	}
 
-	if (!xmmsc_result_get_dict_entry_str (result, "artist", &val)) {
+	if (!xmmsc_result_get_dict_entry_string (result, "artist", &val)) {
 		val = "No artist";
 	}
 
 	printf ("artist = %s\n", val);
 
-	if (!xmmsc_result_get_dict_entry_str (result, "title", &val)) {
+	if (!xmmsc_result_get_dict_entry_string (result, "title", &val)) {
 		val = "Title";
 	}
 	printf ("title = %s\n", val);
 
-	if (!xmmsc_result_get_dict_entry_int32 (result, "bitrate", &intval)) {
+	if (!xmmsc_result_get_dict_entry_int (result, "bitrate", &intval)) {
 		intval = 0;
 	}
 	printf ("bitrate = %i\n", intval);
@@ -112,7 +112,7 @@ main (int argc, char **argv)
 	 * first we ask for the playlist.
 	 */
 
-	result = xmmsc_playlist_list (connection);
+	result = xmmsc_playlist_list_entries (connection, NULL);
 
 	/*
 	 * Wait for it.
