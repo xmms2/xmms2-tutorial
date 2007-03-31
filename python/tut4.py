@@ -84,7 +84,7 @@ than one item of the same entry in the playlist.
 
 first we ask for the playlist.
 """
-result = xmms.playlist_list()
+result = xmms.playlist_list_entries()
 result.wait()
 
 if result.iserror():
