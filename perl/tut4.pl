@@ -27,7 +27,7 @@ if (!$xmms->connect) {
 # 
 # first we ask for the playlist.
 
-my $result = $xmms->playlist_list;
+my $result = $xmms->playlist_list_entries("_active");
 $result->wait;
 
 if ($result->iserror) {
