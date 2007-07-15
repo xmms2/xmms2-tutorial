@@ -36,12 +36,12 @@ print "Currently playing id is $id\n";
 # put into playlists have to be in the medialib. A song's metadata will
 # be added to the medialib the first time you do "xmms2 add" or
 # equivalent.
-# 
+#
 # When we request information for an entry, it will be requested from
 # the medialib, not the playlist or the playback. The playlist and
 # playback only know the unique id of the entry. All other information
 # must be retrieved in subsequent calls.
-# 
+#
 # Entry 0 is non valid. Only 1-inf is valid.  So let's check for 0 and
 # don't ask medialib for it.
 
@@ -56,7 +56,7 @@ if ($id == 0) {
 # base types. It can also be filled with more complex types like lists
 # and dicts. A dict is a key<->value representation where key is always
 # a string but the value can be int, uint or string.
-# 
+#
 # When retrieving an entry from the medialib, you get a dict as return.
 # Let's print out some entries from it and then traverse the dict.
 
@@ -72,7 +72,7 @@ if ($result->iserror) {
 }
 
 # We can extract entries from the hash as we would with a normal Perl
-# hash:
+# hash reference:
 
 my $minfo = $result->value;
 

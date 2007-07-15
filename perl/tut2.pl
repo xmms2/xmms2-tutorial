@@ -15,8 +15,8 @@ if (!$xmms->connect) {
 }
 
 # Now we send a command that will return a result. Let's find out which
-# entry is currently playing. 
-# 
+# entry is currently playing.
+#
 # Note that this program has be run while xmms2 is playing something,
 # otherwise playback_current_id will return 0.
 

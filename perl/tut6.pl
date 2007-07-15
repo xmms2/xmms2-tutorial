@@ -48,7 +48,7 @@ $xmms->request( playback_current_id => \&my_current_id, $xmms );
 # command, the callback set up will receive the result when it arrives.  That
 # means you don't need to wait ($result->wait) for results as in synchronous
 # operations.
-# 
+#
 # In order to make Audio::XMMSClient call your callback functions we need to
 # run a mainloop. The default mainloop uses a standard unix io event listener
 # and can be called like this:

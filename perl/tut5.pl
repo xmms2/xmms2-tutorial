@@ -17,16 +17,17 @@ if (!$xmms->connect) {
 # In tut3 we learned about dicts. But there is more to know on this topic.
 # There are actually two kinds of dicts. The normal ones and property dicts. I
 # will try to explain them here.
-# 
+#
 # A normal dict contains key:value mappings as normal. Getting values from this
 # is straight forward: just access them as normal perl hashes as we did in
 # tut3.
-# 
+#
 # Property dicts are dicts that can have the same key multiple times.  Like two
-# "artists" or "titles". If a propdict is treated like a hash, it will return
-# only one of the possible values for a key. For example, $mypropdict->{artist}
-# will return only one possible value for 'artist' To get the values for keys
-# from a specific source, use $mypropdict->set_source_preference().
+# "artists" or "titles". If a propdict is treated like a hash reference, it
+# will return only one of the possible values for a key. For example,
+# $mypropdict->{artist} will return only one possible value for 'artist' To get
+# the values for keys from a specific source, use
+# $mypropdict->set_source_preference().
 #
 # Alternatively, you can access a value associated to a key from a specific
 # source by accessing the source hash directly:
@@ -34,17 +35,17 @@ if (!$xmms->connect) {
 # $mypropdict->source_hash->{server}->{artist}
 #
 # This will get you the value of 'artist' from the 'server' source.
-# 
+#
 # Property dicts are primarily used by the medialib. In this case the source
 # refers to the application which set the tag.
-# 
+#
 # Most of the time you don't have to care because the default source is set to
 # prefer values set by the server over values set by clients. But if your
 # program wants to override title or artist, for example, you need to call
 # $mypropdict->set_source_preference() before extracting values.
-# 
+#
 # It's also important when iterating over the dicts. Let me show you.
-# 
+#
 # First we retrieve the config values stored in the server and print them out.
 # This is a normal dict.
 
