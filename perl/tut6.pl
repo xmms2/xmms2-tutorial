@@ -33,7 +33,7 @@ sub my_current_id {
 # things by hand:
 #
 # my $request = $xmms->playback_current_id;
-# $request->set_notifier( \&my_current_id, $xmms );
+# $request->notifier_set( \&my_current_id, $xmms );
 
 $xmms->request( playback_current_id => \&my_current_id, $xmms );
 
