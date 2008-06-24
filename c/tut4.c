@@ -35,7 +35,7 @@ get_mediainfo (xmmsc_connection_t *connection,
 {
 	xmmsc_result_t *result;
 
-	char *val;
+	const char *val;
 	int intval;
 
 	result = xmmsc_medialib_get_info (connection, id);
@@ -89,7 +89,7 @@ main (int argc, char **argv)
 	}
 
 	if (!xmmsc_connect (connection, getenv ("XMMS_PATH"))) {
-		fprintf (stderr, "Connection failed: %s\n", 
+		fprintf (stderr, "Connection failed: %s\n",
 		         xmmsc_get_last_error (connection));
 
 		exit (EXIT_FAILURE);

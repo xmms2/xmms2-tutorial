@@ -67,7 +67,7 @@ main (int argc, char **argv)
 	 * string describing the error
 	 */
 	if (!xmmsc_connect (connection, getenv ("XMMS_PATH"))) {
-		fprintf (stderr, "Connection failed: %s\n", 
+		fprintf (stderr, "Connection failed: %s\n",
 		         xmmsc_get_last_error (connection));
 
 		exit (EXIT_FAILURE);

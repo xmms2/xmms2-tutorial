@@ -34,7 +34,7 @@ main (int argc, char **argv)
 	/*
 	 * Variables that we'll need later
 	 */
-	char *val;
+	const char *val;
 	int intval;
 	unsigned int id;
 
@@ -45,7 +45,7 @@ main (int argc, char **argv)
 	}
 
 	if (!xmmsc_connect (connection, getenv ("XMMS_PATH"))) {
-		fprintf (stderr, "Connection failed: %s\n", 
+		fprintf (stderr, "Connection failed: %s\n",
 		         xmmsc_get_last_error (connection));
 
 		exit (EXIT_FAILURE);
