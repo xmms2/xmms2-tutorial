@@ -16,9 +16,9 @@
 #  Introducing asynchronous clients
 
 import xmmsclient
+import xmmsclient.glib
 import os
 import sys
-import xmmsglib
 import gobject
 
 """
@@ -59,17 +59,17 @@ command, the callback set up will receive the result when it arrives.
 That means you don't need to wait (XMMSResult.wait()) for results
 as in synchronous operations.
 
-In order to make xmmsclient call your callback functions we need to put
-the fd of the connection into the mainloop of our program. In this case,
-we're using the Glib mainloop, so We just need to import xmmsglib and
-do the following call to make it work.
+In order to make xmmsclient call your callback functions we need to
+put the fd of the connection into the mainloop of our program. In this
+case, we're using the Glib mainloop, so We just need to import
+xmmsclient.glib and do the following call to make it work.
 
 Note that the XMMS object also has a loop() method that allows for
 asynchronous communications with the server. However, this is only
 useful in simple clients where you don't need to worry about GUI
 mainloops and such.
 """
-conn = xmmsglib.GLibConnector(xmms)
+conn = xmmsclient.glib.GLibConnector(xmms)
 
 """
 Let's ask for the current id in an async way instead of the sync way
