@@ -68,6 +68,8 @@ main (int argc, char **argv)
 	if (!xmmsc_result_get_uint (result, &id)) {
 		fprintf (stderr, "xmmsc_playback_current_id didn't"
 		         "return uint as expected\n");
+		/* Fake id (ids are >= 1) used as an error flag. */
+		id = 0;
 	}
 
 	/* Print the value */

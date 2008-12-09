@@ -11,8 +11,8 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Lesser General Public License for more details.
  *
- *  This file is a part of the XMMS2 client tutorial #6
- *  Introducing asynchronous clients
+ *  This file is a part of the XMMS2 client tutorial #8
+ *  Using a callback to catch a signal and restart it a few times
  */
 
 #include <stdlib.h>
