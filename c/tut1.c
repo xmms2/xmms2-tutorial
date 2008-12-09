@@ -37,6 +37,22 @@ main (int argc, char **argv)
 	xmmsc_result_t *result;
 
 	/*
+	 * xmmsv_t is the wrapper struct used to communicate
+	 * values to/from the server.  Typically, when a client
+	 * issues commands, the server answers by sending back
+	 * the return value for the command. Here, we will only
+	 * use it to check if the server returned an error.
+	 */
+	xmmsv_t *return_value;
+
+	/*
+	 * We need a string pointer to retrieve the error (if any)
+	 * from the xmmsv_t.  Note that the string will still be
+	 * owned by the xmmsv_t structure.
+	 */
+	const char *err_buf;
+
+	/*
 	 * First we need to initialize the connection;
 	 * as argument you need to pass "name" of your
 	 * client. The name has to be in the range [a-zA-Z0-9]
@@ -90,20 +106,29 @@ main (int argc, char **argv)
 
 	/*
 	 * When xmmsc_result_wait() returns, we have the
-	 * answer from the server. Let's check for errors
-	 * and print it out if something went wrong
+	 * answer from the server. We now extract that value
+	 * from the result. Note that the value is still owned
+	 * by the result, and will be freed along with it.
 	 */
-	if (xmmsc_result_iserror (result)) {
+	return_value = xmmsc_result_get_value (result);
+
+	/*
+	 * Let's check if the value returned by the server
+	 * is an error, and print it out if it is.
+	 */
+	if (xmmsv_is_error (return_value) &&
+	    xmmsv_get_error (return_value, &err_buf)) {
 		fprintf (stderr, "playback start returned error, %s",
-		         xmmsc_result_get_error (result));
+		         err_buf);
 	}
 
 	/*
 	 * This is very important - when we are done with the
 	 * result we need to tell that to the clientlib,
-	 * we do that by unrefing it. this will free resources
-	 * and make sure that we don't leak memory. It is
-	 * not possible to touch the result after we have done this.
+	 * we do that by unrefing it. this will free resources,
+	 * including the return_value, and make sure that we don't
+	 * leak memory. It is not possible to touch the result or
+	 * the return_value after we have done this.
 	 */
 	xmmsc_result_unref (result);
 

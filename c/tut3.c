@@ -30,6 +30,8 @@ main (int argc, char **argv)
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
+	xmmsv_t *return_value;
+	const char *err_buf;
 
 	/*
 	 * Variables that we'll need later
@@ -37,6 +39,8 @@ main (int argc, char **argv)
 	const char *val;
 	int intval;
 	unsigned int id;
+	xmmsv_t *dict_entry;
+	xmmsv_t *infos;
 
 	connection = xmmsc_init ("tutorial3");
 	if (!connection) {
@@ -59,14 +63,16 @@ main (int argc, char **argv)
 	 */
 	result = xmmsc_playback_current_id (connection);
 	xmmsc_result_wait (result);
+	return_value = xmmsc_result_get_value (result);
 
-	if (xmmsc_result_iserror (result)) {
+	if (xmmsv_is_error (return_value) &&
+	    xmmsv_get_error (return_value, &err_buf)) {
 		fprintf (stderr, "playback current id returns error, %s\n",
-		         xmmsc_result_get_error (result));
+		         err_buf);
 	}
 
-	if (!xmmsc_result_get_uint (result, &id)) {
-		fprintf (stderr, "xmmsc_playback_current_id didn't"
+	if (!xmmsv_get_uint (return_value, &id)) {
+		fprintf (stderr, "xmmsc_playback_current_id didn't "
 		         "return uint as expected\n");
 		/* Fake id (ids are >= 1) used as an error flag. */
 		id = 0;
@@ -106,12 +112,17 @@ main (int argc, char **argv)
 	/* 
 	 * And now for something about return types from
 	 * clientlib. The clientlib will always return
-	 * an xmmsc_result_t that will eventually be filled.
-	 * It can be filled with int, uint and string  as
-	 * base types. It can also be filled with more complex
-	 * types like lists and dicts. A dict is a key<->value
-	 * representation where key is always a string but
-	 * the value can be int, uint or string.
+	 * an xmmsc_result_t that will eventually contain the
+	 * return value as a xmmsv_t struct.
+	 * The value can contain an int, uint and string as
+	 * base type. It can also contain more complex
+	 * types like lists and dicts.
+	 * A list is a sequence of values, each of them
+	 * wrapped in its own xmmsv_t struct (of any type).
+
+	 * A dict is a key<->value representation where key
+	 * is always a string but the value is again wrapped
+	 * in its own xmmsv_t struct (of any type).
 	 *
 	 * When retrieving an entry from the medialib, you
 	 * get a dict as return. Let's print out some
@@ -122,33 +133,57 @@ main (int argc, char **argv)
 	/* And waaait for it .. */
 	xmmsc_result_wait (result);
 
-	if (xmmsc_result_iserror (result)) {
+	/* Let's reuse the previous return_value pointer, it
+	 * was invalidated as soon as we freed the result that
+	 * contained it anyway.
+	 */
+	return_value = xmmsc_result_get_value (result);
+
+	if (xmmsv_is_error (return_value) &&
+	    xmmsv_get_error (return_value, &err_buf)) {
 		/* 
 		 * This can return error if the id
 		 * is not in the medialib
 		 */
 		fprintf (stderr, "medialib get info returns error, %s\n",
-		         xmmsc_result_get_error (result));
+		         err_buf);
 		exit (EXIT_FAILURE);
 	}
 
 	/*
-	 * Dicts can't be extracted, but we can extract
-	 * entries from the dict, like this:
+	 * Because of the nature of the dict returned by
+	 * xmmsc_medialib_get_info, we need to convert it to
+	 * a simpler dict using xmmsv_propdict_to_dict.
+	 * Let's not worry about that for now and accept it
+	 * as a fact of life.
+	 *
+	 * See tut5 for a discussion about dicts and propdicts.
+	 *
+	 * Note that xmmsv_propdict_to_dict creates a new
+	 * xmmsv_t struct, which we will need to free manually
+	 * when we're done with it.
 	 */
-	if (!xmmsc_result_get_dict_entry_string (result, "artist", &val)) {
+	infos = xmmsv_propdict_to_dict (return_value, NULL);
+
+	/*
+	 * We must first retrieve the xmmsv_t struct
+	 * corresponding to the "artist" key in the dict,
+	 * and then extract the string from that struct.
+	 */
+	if (!xmmsv_dict_get (infos, "artist", &dict_entry) ||
+	    !xmmsv_get_string (dict_entry, &val)) {
 		/*
 		 * if we end up here it means that the key "artist" wasn't
 		 * in the dict or that the value for "artist" wasn't a
 		 * string.
 		 * 
-		 * You can check this before trying to get the value with
-		 * xmmsc_result_get_dict_entry_type. It will return
-		 * XMMSC_RESULT_VALUE_TYPE_NONE if it's not in the dict.
+		 * You can check the type of the entry (if there is one) with
+		 * xmmsv_get_type (dict_entry). It will return an
+		 * xmmsv_type_t enum describing the type.
 		 *
-		 * Actually this is no disasater, it might just mean that
-		 * we don't have a artist tag on this entry. Let's
-		 * called it no artist for now.
+		 * Actually this is no disaster, it might just mean that
+		 * we don't have an artist tag on this entry. Let's
+		 * call it "No Artist" for now.
 		 */
 		val = "No Artist";
 	}
@@ -156,7 +191,8 @@ main (int argc, char **argv)
 	/* print the value */
 	printf ("artist = %s\n", val);
 
-	if (!xmmsc_result_get_dict_entry_string (result, "title", &val)) {
+	if (!xmmsv_dict_get (infos, "title", &dict_entry) ||
+	    !xmmsv_get_string (dict_entry, &val)) {
 		val = "No Title";
 	}
 	printf ("title = %s\n", val);
@@ -164,20 +200,26 @@ main (int argc, char **argv)
 	/*
 	 * Let's extract an integer as well
 	 */
-	if (!xmmsc_result_get_dict_entry_int (result, "bitrate", &intval)) {
+	if (!xmmsv_dict_get (infos, "bitrate", &dict_entry) ||
+	    !xmmsv_get_int (dict_entry, &intval)) {
 		intval = 0;
 	}
 	printf ("bitrate = %i\n", intval);
 
 	/*
+	 * We need to free infos manually here, else we will leak.
+	 */
+	xmmsv_unref (infos);
+
+	/*
 	 * !!Important!!
 	 *
 	 * When unreffing the result here we will free
-	 * the memory in that we have extracted by running
-	 * xmmsc_result_get_dict_entry_* so if you want to
-	 * keep strings somewhere you need to copy that
-	 * memory! very important otherwise you will get
-	 * undefined behaviour.
+	 * the memory that we have extracted from the dict,
+	 * and that includes all the string pointers of the
+	 * dict entries! So if you want to keep strings
+	 * somewhere you need to copy that memory! Very
+	 * important otherwise you will get undefined behaviour.
 	 */
 	xmmsc_result_unref (result);
 

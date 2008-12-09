@@ -30,6 +30,8 @@ main (int argc, char **argv)
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
+	xmmsv_t *return_value;
+	const char *err_buf;
 
 	/* This will be used later */
 	unsigned int id;
@@ -65,31 +67,38 @@ main (int argc, char **argv)
 	xmmsc_result_wait (result);
 
 	/*
+	 * Retrieve the return value from the result.
+	 */
+	return_value = xmmsc_result_get_value (result);
+
+	/*
 	 * Also this time we need to check for errors.
 	 * Errors can occur on all commands, but not signals
 	 * and broadcasts. We will talk about these later.
 	 */
-	if (xmmsc_result_iserror (result)) {
+	if (xmmsv_is_error (return_value) &&
+	    xmmsv_get_error (return_value, &err_buf)) {
 		fprintf (stderr, "playback current id returns error, %s",
-		         xmmsc_result_get_error (result));
+		         err_buf);
 	}
 
 	/*
-	 * Let's retrieve the value from the result struct.
+	 * Let's extract the uint value from the value struct.
 	 * The caveat here is that you have to know what type
-	 * of value is returned in response to each command.
+	 * of value is returned in response to each command,
+	 * or check it manually using xmmsv_get_type.
 	 *
 	 * In this case we know that xmmsc_playback_current_id
-	 * will return a UINT
+	 * will return a UINT.
 	 *
-	 * Know that all xmmsc_result_get calls can return FALSE
+	 * Know that all xmmsv_get_* calls can return FALSE
 	 * and that means that the value you are requesting is
-	 * not in the result struct.
+	 * not in the xmmsv_t struct.
 	 *
-	 * Values are stored in the pointer passed to result_get
+	 * Values are stored in the pointer passed to xmmsv_get_*
 	 */
-	if (!xmmsc_result_get_uint (result, &id)) {
-		fprintf (stderr, "xmmsc_playback_current_id didn't"
+	if (!xmmsv_get_uint (return_value, &id)) {
+		fprintf (stderr, "xmmsc_playback_current_id didn't "
 		         "return uint as expected\n");
 	}
 

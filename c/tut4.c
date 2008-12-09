@@ -34,35 +34,51 @@ get_mediainfo (xmmsc_connection_t *connection,
                unsigned int id)
 {
 	xmmsc_result_t *result;
+	xmmsv_t *return_value;
+	const char *err_buf;
 
+	xmmsv_t *dict_entry;
+	xmmsv_t *infos;
 	const char *val;
 	int intval;
 
 	result = xmmsc_medialib_get_info (connection, id);
 
 	xmmsc_result_wait (result);
+	return_value = xmmsc_result_get_value (result);
 
-	if (xmmsc_result_iserror (result)) {
+	if (xmmsv_get_error (return_value, &err_buf)) {
 		fprintf (stderr, "medialib get info returns error, %s\n",
-		         xmmsc_result_get_error (result));
+		         err_buf);
 		exit (EXIT_FAILURE);
 	}
 
-	if (!xmmsc_result_get_dict_entry_string (result, "artist", &val)) {
+	/* Same remark as in tut3, see tut5 for details on why
+	 * we need to do this.
+	 */
+	infos = xmmsv_propdict_to_dict (return_value, NULL);
+
+	if (!xmmsv_dict_get (infos, "artist", &dict_entry) ||
+	    !xmmsv_get_string (dict_entry, &val)) {
 		val = "No artist";
 	}
 
 	printf ("artist = %s\n", val);
 
-	if (!xmmsc_result_get_dict_entry_string (result, "title", &val)) {
+	if (!xmmsv_dict_get (infos, "title", &dict_entry) ||
+	    !xmmsv_get_string (dict_entry, &val)) {
 		val = "Title";
 	}
 	printf ("title = %s\n", val);
 
-	if (!xmmsc_result_get_dict_entry_int (result, "bitrate", &intval)) {
+	if (!xmmsv_dict_get (infos, "bitrate", &dict_entry) ||
+	    !xmmsv_get_int (dict_entry, &intval)) {
 		intval = 0;
 	}
 	printf ("bitrate = %i\n", intval);
+
+	/* Again, unref infos else we leak. */
+	xmmsv_unref (infos);
 
 	xmmsc_result_unref (result);
 
@@ -77,10 +93,13 @@ main (int argc, char **argv)
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
+	xmmsv_t *return_value;
+	const char *err_buf;
 
 	/*
 	 * Variables that we'll need later
 	 */
+	xmmsv_list_iter_t *it;
 
 	connection = xmmsc_init ("tutorial4");
 	if (!connection) {
@@ -96,9 +115,14 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * So let's look at lists. Lists can only contain
-	 * one type of values. So you either have a list
-	 * of strings, a list of ints or a list of uints.
+	 * So let's look at lists. Lists contains values,
+	 * each wrapped in its own xmmsv_t struct.
+	 * This implies that we could have entries of mixed
+	 * types. In practice, most server commands return
+	 * lists containing only one type of value.
+	 * So you either have a list of strings, a list of
+	 * ints, etc.
+	 *
 	 * In this case we ask for the whole current playlist.
 	 * It will return a result with a list of uints.
 	 * Each uint is the id number of the entry.
@@ -107,7 +131,7 @@ main (int argc, char **argv)
 	 * and the position. Each alteration command (move,
 	 * remove) works on the position of the entry rather
 	 * than the id. This is because you can have more
-	 * than one item of the same entry in the playlist.
+	 * than one occurrence of the same entry in the playlist.
 	 *
 	 * first we ask for the playlist.
 	 */
@@ -115,30 +139,54 @@ main (int argc, char **argv)
 	result = xmmsc_playlist_list_entries (connection, NULL);
 
 	/*
-	 * Wait for it.
+	 * Wait for it and retrieve the value.
 	 */
 	xmmsc_result_wait (result);
+	return_value = xmmsc_result_get_value (result);
 
-	/* check for error */
-	if (xmmsc_result_iserror (result)) {
+	/* Check for error - this time we cheat a bit: we don't
+	 * really need to check with xmmsv_is_error, because
+	 * xmmsv_get_error will also fail if return_value is not
+	 * an error. Simpler!
+	 */
+	if (xmmsv_get_error (return_value, &err_buf)) {
 		fprintf (stderr, "error when asking for the playlist, %s\n",
-		         xmmsc_result_get_error (result));
+		         err_buf);
 		exit (EXIT_FAILURE);
 	}
 
-	/*
-	 * Now iterate the list. You use the same calls as
-	 * if the result was a normal one: xmmsc_result_get_int
-	 * and so on. But you also tell the list to move forward
-	 * in the for loop.
+	/* To iterate over the list, we will use a list iterator.
+	 * Like all data in xmmsv_t structs, iterators are also owned
+	 * by the value struct and will be freed automatically along
+	 * with it.
+	 * First, extract the iterator from the return_value.
 	 */
-	for (;xmmsc_result_list_valid (result); xmmsc_result_list_next (result)) {
-		/* let's extract the id per node in the list */
+	if (!xmmsv_get_list_iter (return_value, &it)) {
+		fprintf (stderr, "xmmsc_playlist_list_entries didn't "
+		         "return a list as expected\n");
+		exit (EXIT_FAILURE);
+	}
+
+	/* We now use the iterator functions to loop over the list.
+	 */
+	for (; xmmsv_list_iter_valid (it); xmmsv_list_iter_next (it)) {
+		/* let's extract the id of the current entry in the list */
 		unsigned int id;
-		if (!xmmsc_result_get_uint (result, &id)) {
+		xmmsv_t *list_entry;
+
+		/* First, get the list entry pointed at by the iterator. */
+		if (!xmmsv_list_iter_entry (it, &list_entry)) {
 			/* whoops, this should never happen unless
 			 * you did something wrong */
-			fprintf (stderr, "Couldn't get uint from list\n");
+			fprintf (stderr, "Couldn't get entry from list\n");
+			exit (EXIT_FAILURE);
+		}
+
+		/* Then, extract the uint from the entry as we always do. */
+		if (!xmmsv_get_uint (list_entry, &id)) {
+			/* whoops, this should never happen unless
+			 * you did something wrong */
+			fprintf (stderr, "Couldn't get uint from list entry\n");
 			exit (EXIT_FAILURE);
 		}
 
@@ -158,19 +206,19 @@ main (int argc, char **argv)
 		 *
 		 * More about this later. Baby steps :-)
 		 */
-
 	}
 
 	/*
 	 * At this point we have gone through the whole list and
-	 * xmmsc_result_list_valid() will return negative to
-	 * help tell us that we've reached the end of the list.
+	 * xmmsv_list_iter_valid() will return FALSE to
+	 * tell us that we've reached the end of the list.
 	 *
-	 * We can now call xmmsc_result_list_first() to return
-	 * to the beginning if we need to work with it some
-	 * more.
+	 * We could now call xmmsv_list_iter_first() to return
+	 * the iterator to the start of the list if we needed to
+	 * work with it some more.
 	 *
-	 * We just throw it away.
+	 * Or we just throw it away, along with everything else,
+	 * by freeing the container result.
 	 */
 	xmmsc_result_unref (result);
 

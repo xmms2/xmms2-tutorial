@@ -21,45 +21,42 @@
 #include <xmmsclient/xmmsclient.h>
 
 /*
- * We will call it this from xmmsc_result_dict_foreach later
+ * We will call this from xmmsv_dict_foreach later
  * in the program. Skip ahead to the main program and read
  * the information there first
  */
 void
-my_dict_foreach (const void *key, xmmsc_result_value_type_t type,
-                 const void *value, void *user_data)
+my_dict_foreach (const char *key, xmmsv_t *value, void *user_data)
 {
 	/*
 	 * We get called for each entry in the dict.
-	 * Here we need to decide how to print the values
-	 * and move on with life
+	 * Here we need to decide how to print the value
+	 * depending on its type and move on with life
 	 */
-	const char *k = (const char *)key;
 
-	switch (type) {
-		case XMMSC_RESULT_VALUE_TYPE_NONE:
+	switch (xmmsv_get_type (value)) {
+		case XMMSV_TYPE_NONE:
 			/* nothing to do, empty value */
 			break;
-		case XMMSC_RESULT_VALUE_TYPE_UINT32:
-		case XMMSC_RESULT_VALUE_TYPE_INT32:
+		case XMMSV_TYPE_UINT32:
 			{
-				/* 
-				 * both these can be handled
-				 * the same way when we just print
-				 * them
-				 */
-				int val = XPOINTER_TO_INT (value);
-				printf ("%s = %d\n", k, val);
+				unsigned int val;
+				xmmsv_get_uint (value, &val);
+				printf ("%s = %u\n", key, val);
 				break;
 			}
-		case XMMSC_RESULT_VALUE_TYPE_STRING:
+		case XMMSV_TYPE_INT32:
 			{
-				/*
-				 * a string!
-				 */
-				const char *val = (const char *) value;
-
-				printf ("%s = %s\n", k, val);
+				int val;
+				xmmsv_get_int (value, &val);
+				printf ("%s = %d\n", key, val);
+				break;
+			}
+		case XMMSV_TYPE_STRING:
+			{
+				const char *val;
+				xmmsv_get_string (value, &val);
+				printf ("%s = %s\n", key, val);
 				break;
 			}
 		default:
@@ -68,46 +65,63 @@ my_dict_foreach (const void *key, xmmsc_result_value_type_t type,
 
 }
 
+/* We'll declare this one right below. */
+void my_propdict_inner_foreach (const char *source, xmmsv_t *value,
+                                void *user_data);
+
 /*
- * This function is the same as above, but it also
- * takes a source argument.
+ * This function is called for each pair of the key<->(source<->value)
+ * propdict; we dispatch another foreach call to iterate over all the
+ * source<->value pairs.
  */
 void
-my_propdict_foreach (const void *key, xmmsc_result_value_type_t type,
-                     const void *value, const char *source,
+my_propdict_foreach (const char *key, xmmsv_t *src_val_dict,
                      void *user_data)
 {
-	/*
-	 * We get called for each entry in the dict.
-	 * Here we need to decide how to print the values
-	 * and move on with life
-	 */
-	const char *k = (const char *)key;
+	/* We pass the key along as user_data. */
+	xmmsv_dict_foreach (src_val_dict, my_propdict_inner_foreach,
+	                    (void *) key);
+}
 
-	switch (type) {
-		case XMMSC_RESULT_VALUE_TYPE_NONE:
+/*
+ * This function is called for each inner pair source<->value of the
+ * propdict. The parent key is received as user_data. We can now print
+ * the full tuple from here!
+ */
+void
+my_propdict_inner_foreach (const char *source, xmmsv_t *value,
+                           void *user_data)
+{
+	/*
+	 * We get called for each tuple in the propdict.
+	 * Here we need to decide how to print the value
+	 * depending on its type and move on with life
+	 */
+	const char *key = (const char *) user_data;
+
+	switch (xmmsv_get_type (value)) {
+		case XMMSV_TYPE_NONE:
 			/* nothing to do, empty value */
 			break;
-		case XMMSC_RESULT_VALUE_TYPE_UINT32:
-		case XMMSC_RESULT_VALUE_TYPE_INT32:
+		case XMMSV_TYPE_UINT32:
 			{
-				/* 
-				 * both of these can be handled
-				 * the same way when we just print
-				 * them
-				 */
-				int val = XPOINTER_TO_INT (value);
-				printf ("%s:%s = %d\n", source, k, val);
+				unsigned int val;
+				xmmsv_get_uint (value, &val);
+				printf ("%s:%s = %u\n", source, key, val);
 				break;
 			}
-		case XMMSC_RESULT_VALUE_TYPE_STRING:
+		case XMMSV_TYPE_INT32:
 			{
-				/*
-				 * a string!
-				 */
-				const char *val = (const char *) value;
-
-				printf ("%s:%s = %s\n", source, k, val);
+				int val;
+				xmmsv_get_int (value, &val);
+				printf ("%s:%s = %d\n", source, key, val);
+				break;
+			}
+		case XMMSV_TYPE_STRING:
+			{
+				const char *val;
+				xmmsv_get_string (value, &val);
+				printf ("%s:%s = %s\n", source, key, val);
 				break;
 			}
 		default:
@@ -125,6 +139,7 @@ main (int argc, char **argv)
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
+	xmmsv_t *return_value;
 
 	/*
 	 * Values that we need later
@@ -145,54 +160,59 @@ main (int argc, char **argv)
 
 	/*
 	 * In tut3 we learned about dicts. But there is more to know on this
-	 * topic. There are actually two kinds of dicts. The normal ones and 
-	 * property dicts. I will try to explain them here.
+	 * topic. Some commands return more complex dict structures. I will
+	 * try to explain them here.
 	 *
-	 * A normal dict contains key:value mappings as normal. Getting values from
-	 * this is straight forward: just run xmmsc_result_get_dict_value_* as
-	 * we did in tut3.
+	 * A normal dict contains key<->value mappings as normal, where
+	 * the value is of a simple type (int, uint, string). Getting
+	 * values from this is straightforward (see tut3).
 	 *
-	 * Property dicts are dicts that can have the same key multiple times.
-	 * Like two "artists" or "titles". Running xmmsc_result_get_dict_value_*
-	 * on these dicts will cause it to return one of the values. The priority
-	 * of which value to be returned is set by:
-	 * xmmsc_result_source_preference_set(). Property dicts is primarily used
-	 * by the medialib. In this case the source refers to the application which
-	 * set the tag.
+	 * On the other hand, xmmsc_medialib_get_info returns what we call a
+	 * "property dicts", which is essentially of the form
+	 * key<->(source<->value). In other words, each property key in the
+	 * dict is mapped to a value which is also a dict. This inner dict
+	 * maps property sources to property values.
+	 * This allows the same property key to have multiple property
+	 * values, one for each source. Like two "artists" or "titles".
+	 * Property dicts (or propdicts) are primarily used by the medialib.
+	 * In this case the source refers to the application which set
+	 * the value of the property.
 	 *
-	 * Most of the time you don't have to care because the default source is
-	 * set to prefer values set by the server over values set by clients. But
-	 * if your program wants to override title or artist for example you need
-	 * to call xmmsc_result_source_preference_set before extracting values.
+	 * Most of the time, you might not care and might just want one
+	 * value per key, i.e. a simple key<->value mapping. The
+	 * xmmsv_propdict_to_dict helper function converts a propdict into
+	 * a simpler, flat dict (see the documentation to use it and use
+	 * custom source preferences).
 	 *
-	 * It's also important when iterating over the dicts. Let me show you.
+	 * In this tutorial, we will act as if we care about all sources
+	 * and iterate over the propdict. Let me show you.
 	 *
 	 * First we retrieve the config values stored in the server and print
 	 * them out. This is a normal dict.
 	 */
 	result = xmmsc_configval_list (connection);
-
 	xmmsc_result_wait (result);
+	return_value = xmmsc_result_get_value (result);
 
 	/*
 	 * Iterating over a dict is done by calling a callback function for
-	 * each entry in the dict. In this case it's a normal dict
-	 * so lets invoke xmmsc_result_dict_foreach()
+	 * each key<->value pair in the dict.
 	 */
-	xmmsc_result_dict_foreach (result, my_dict_foreach, NULL);
+	xmmsv_dict_foreach (return_value, my_dict_foreach, NULL);
 	xmmsc_result_unref (result);
 
 	/*
-	 * Now get a prop dict. Entry 1 should be the default clip
+	 * Now get a "prop dict". Entry 1 should be the default clip
 	 * we ship so it should be safe to request information
 	 * about it.
 	 */
 
 	result = xmmsc_medialib_get_info (connection, 1);
 	xmmsc_result_wait (result);
+	return_value = xmmsc_result_get_value (result);
 
 	/* now call xmmsc_result_prop_dict_foreach instead! */
-	xmmsc_result_propdict_foreach (result, my_propdict_foreach, NULL);
+	xmmsv_dict_foreach (return_value, my_propdict_foreach, NULL);
 	xmmsc_result_unref (result);
 
 	xmmsc_unref (connection);

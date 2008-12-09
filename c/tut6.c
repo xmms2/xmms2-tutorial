@@ -31,11 +31,11 @@
  * method. Read the main program first before
  * returning here.
  */
-void
-my_current_id (xmmsc_result_t *result, void *userdata)
+int
+my_current_id (xmmsv_t *value, void *userdata)
 {
 	/*
-	 * At this point the result struct is filled with the
+	 * At this point the value struct contains the
 	 * answer. And we can now extract it as normal.
 	 */
 	unsigned int id;
@@ -45,16 +45,30 @@ my_current_id (xmmsc_result_t *result, void *userdata)
 	 * to set_notifier, which means it will be
 	 * passed as userdata to this function
 	 */
-	GMainLoop *ml = userdata;
+	GMainLoop *ml = (GMainLoop *) userdata;
 
-	if (!xmmsc_result_get_uint (result, &id)) {
-		fprintf (stderr, "Result didn't contain right type!\n");
+	if (!xmmsv_get_uint (value, &id)) {
+		fprintf (stderr, "Value didn't contain the expected type!\n");
 		exit (EXIT_FAILURE);
 	}
 
 	printf ("Current id is %u\n", id);
 
 	g_main_loop_quit (ml);
+
+	/* We will see in the next tutorial what the return value of a
+	 * callback is used for.  It only matters for signals and
+	 * broadcasts anyway, so for simple commands like here, we can
+	 * return either TRUE or FALSE.
+	 */
+	return TRUE;
+
+	/* One thing to notice here, at the end of callbacks,
+	 * is that as soon as the xmmsv_t struct goes out of
+	 * scope, it will be freed automatically.
+	 * If you want to keep it around in memory, you will
+	 * need to increment its refcount using xmmsv_ref.
+	 */
 }
 
 int

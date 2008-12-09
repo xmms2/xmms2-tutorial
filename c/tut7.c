@@ -36,14 +36,15 @@ typedef struct udata_St {
  * method. Read the main program first before
  * returning here.
  */
-void
-my_current_id (xmmsc_result_t *result, void *userdata)
+int
+my_current_id (xmmsv_t *value, void *userdata)
 {
 	/*
-	 * At this point the result struct is filled with the
+	 * At this point the value struct contains the
 	 * answer. And we can now extract it as normal.
 	 */
 	unsigned int id;
+	int keep_alive = TRUE;
 
 	/*
 	 * we passed the udata struct as an argument
@@ -58,8 +59,8 @@ my_current_id (xmmsc_result_t *result, void *userdata)
 	 */
 	udata->counter++;
 
-	if (!xmmsc_result_get_uint (result, &id)) {
-		fprintf (stderr, "Result didn't contain right type!\n");
+	if (!xmmsv_get_uint (value, &id)) {
+		fprintf (stderr, "Value didn't contain the expected type!\n");
 		exit (EXIT_FAILURE);
 	}
 
@@ -67,14 +68,27 @@ my_current_id (xmmsc_result_t *result, void *userdata)
 
 	/*
 	 * Check how many times the broadcast has been called.
-	 * If five times, then disconnect the broadcast and
+	 * If five times, then stop the broadcast and
 	 * tell the mainloop to exit.
 	 */
 	if (udata->counter == 5) {
 		printf ("Broadcast called %d times, exiting...\n", udata->counter);
-		xmmsc_result_disconnect (result);
 		g_main_loop_quit (udata->ml);
+		keep_alive = FALSE;
 	}
+
+	/*
+	 * As promised, let's explain this magic.  The return value of
+	 * callbacks has no purpose for normal commands, but in the case
+	 * of signals and broadcasts, it determines whether we want to keep
+	 * running that callback or not.
+	 * If returning TRUE, a signal would be restarted and a broadcast
+	 * would keep going.
+	 * If returning FALSE, a signal would not be restarted and a
+	 * broadcast would be disconnected, i.e. they would stop.
+	 * Here, we return FALSE after the callback is called 5 times.
+	 */
+	return keep_alive;
 }
 
 int

@@ -32,8 +32,8 @@
  * method. Read the main program first before
  * returning here.
  */
-void
-my_playtime (xmmsc_result_t *result, void *userdata)
+int
+my_playtime (xmmsv_t *value, void *userdata)
 {
 	/*
 	 * At this point the result struct is filled with the
@@ -41,20 +41,17 @@ my_playtime (xmmsc_result_t *result, void *userdata)
 	 */
 	unsigned int time;
 
-	/*
-	 * The restart result.
-	 */
-	xmmsc_result_t *new_result;
+	int keep_alive;
 
 	/*
 	 * we passed the mainloop as an argument
 	 * to set_notifier, which means it will be
 	 * passed as userdata to this function
 	 */
-	GMainLoop *ml = userdata;
+	GMainLoop *ml = (GMainLoop *) userdata;
 
-	if (!xmmsc_result_get_uint (result, &time)) {
-		fprintf (stderr, "Result didn't contain right type!\n");
+	if (!xmmsv_get_uint (value, &time)) {
+		fprintf (stderr, "Value didn't contain the expected type!\n");
 		exit (EXIT_FAILURE);
 	}
 
@@ -66,20 +63,26 @@ my_playtime (xmmsc_result_t *result, void *userdata)
 	fflush (stdout);
 
 	/*
-	 * We will exit the application after 5000ms has passed.
+	 * We will exit the application after 5000ms have passed.
 	 * Otherwise we will restart the signal to enable this
 	 * callback to be called yet another time.
 	 */
 	if (time > 5000) {
 		printf ("\nMore than 5000 ms has been played, exiting...\n");
-		xmmsc_result_disconnect (result);
 		g_main_loop_quit (ml);
+		keep_alive = FALSE;
 	} else {
-		/* Tell the server to send updates to the same callback */
-		new_result = xmmsc_result_restart (result);
-		xmmsc_result_unref (result);
-		xmmsc_result_unref (new_result);
+		/* Tell the server to send updates to the
+		 * same callback (AKA restart the signal) */
+		keep_alive = TRUE;
 	}
+
+	/*
+	 * We use the return value of the callback once
+	 * again to determine whether to restart the signal
+	 * or just let it die.
+	 */
+	return keep_alive;
 }
 
 int
@@ -119,16 +122,10 @@ main (int argc, char **argv)
 	 */
 	ml = g_main_loop_new (NULL, FALSE);
 
-
 	/*
-	 * The big difference between a sync client and an async client is that the
-	 * async client works with callbacks. When you send a command and get an
-	 * xmmsc_result_t back you should set up a callback for it and directly
-	 * unref it. This means we can't do syncronous operations on this connection.
-	 *
-	 * In simple cases you can use the XMMS_CALLBACK_SET macro, but in order to
-	 * be verbose here I do it all manually. Let's ask for the current id
-	 * in an async way instead of the sync way as we did in tut2.
+	 * We issue two async commands to restart playback.
+	 * Since we don't want to set a notifier for those,
+	 * we can free the result immediately.
 	 */
 	xmmsc_result_unref (xmmsc_playback_stop (connection));
 	xmmsc_result_unref (xmmsc_playback_start (connection));
