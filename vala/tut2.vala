@@ -1,5 +1,5 @@
 public class Tutorial1 {
-	public static void main (string[] args) {
+	public static int main (string[] args) {
 		/*
 		 * The first part of this program is
 		 * commented in tut1.c See that one for
@@ -10,7 +10,7 @@ public class Tutorial1 {
 		weak string path = GLib.Environment.get_variable("XMMS_PATH");
 		if (!xc.connect(path)) {
 			GLib.stderr.printf("Could not connect: %s\n", xc.get_last_error());
-			return;
+			return 1;
 		}
 
 		/*
@@ -35,8 +35,12 @@ public class Tutorial1 {
 		 * Errors can occur on all commands, but not signals
 		 * and broadcasts. We will talk about these later.
 		 */
-		if (res.iserror()) {
-			GLib.stderr.printf("Xmms.Client.playback_current_id returned error: %s\n", res.get_error());
+		weak string error = null;
+		weak Xmms.Value value = res.get_value();
+
+		if (value.is_error() && value.get_error(out error)) {
+			GLib.stderr.printf("Xmms.Client.playback_current_id returned error: %s\n", error);
+			return 1;
 		}
 
 		/*
@@ -53,12 +57,15 @@ public class Tutorial1 {
 		 *
 		 * Values are stored in the pointer passed to result_get
 		 */
-		uint id;
-		if (!res.get_uint(out id)) {
-			GLib.stderr.printf("Xmms.Client.playback_current_id didn't return uint as expected\n");
+		int id;
+		if (!value.get_int(out id)) {
+			GLib.stderr.printf("Xmms.Client.playback_current_id didn't return int as expected\n");
+			return 1;
 		}
 
 		/* Print the value */
 		GLib.stdout.printf("Currently playing id is %d\n", id);
+
+		return 0;
 	}
 }

@@ -1,5 +1,5 @@
 public class Tutorial1 {
-	public static void main (string[] args) {
+	public static int main (string[] args) {
 		/*
 		 * First we need to initialize the connection;
 		 * as argument you need to pass "name" of your
@@ -24,7 +24,7 @@ public class Tutorial1 {
 		weak string path = GLib.Environment.get_variable("XMMS_PATH");
 		if (!xc.connect(path)) {
 			GLib.stderr.printf("Could not connect: %s\n", xc.get_last_error());
-			return;
+			return 1;
 		}
 
 		/*
@@ -47,8 +47,15 @@ public class Tutorial1 {
 		 * answer from the server. Let's check for errors
 		 * and print it out if something went wrong
 		 */
-		if (res.iserror()) {
-			GLib.stderr.printf("Playback start returned error: %s\n", res.get_error());
+
+		weak string error = null;
+		weak Xmms.Value value = res.get_value();
+
+		if (value.is_error() && value.get_error(out error)) {
+			GLib.stderr.printf("Playback start returned error: %s\n", error);
+			return 1;
 		}
+
+		return 0;
 	}
 }

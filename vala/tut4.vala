@@ -1,36 +1,43 @@
 public class Tutorial1 {
-	public static void get_mediainfo(Xmms.Client xc, uint id) {
+	public static int get_mediainfo(Xmms.Client xc, int id) {
 		weak string val;
 		int intval;
 
 		Xmms.Result res = xc.medialib_get_info(id);
 		res.wait();
 
-		if (res.iserror()) {
-			GLib.stderr.printf("Medialib get info returns error, %s\n", res.get_error());
-			return;
+		weak string error = null;
+		weak Xmms.Value value = res.get_value();
+
+		if (value.is_error() && value.get_error(out error)) {
+			GLib.stderr.printf("Medialib get info returns error, %s\n", error);
+			return 1;
 		}
 
-		if (!res.get_dict_entry_string("artist", out val)) {
+		Xmms.Value metadata = value.propdict_to_dict();
+
+		if (!metadata.dict_entry_get_string("artist", out val)) {
 			val = "No Artist";
 		}
 
 		GLib.stdout.printf ("artist = %s\n", val);
 
-		if (!res.get_dict_entry_string("title", out val)) {
+		if (!metadata.dict_entry_get_string("title", out val)) {
 			val = "No Title";
 		}
 
 		GLib.stdout.printf ("title = %s\n", val);
 
-		if (!res.get_dict_entry_int("bitrate", out intval)) {
+		if (!metadata.dict_entry_get_int("bitrate", out intval)) {
 			intval = 0;
 		}
 
 		GLib.stdout.printf ("bitrate = %d\n", intval);
 
+		return 0;
 	}
-	public static void main (string[] args) {
+
+	public static int main (string[] args) {
 		/*
 		 * The first part of this program is
 		 * commented in tut1.c See that one for
@@ -41,16 +48,16 @@ public class Tutorial1 {
 		weak string path = GLib.Environment.get_variable("XMMS_PATH");
 		if (!xc.connect(path)) {
 			GLib.stderr.printf("Could not connect: %s\n", xc.get_last_error());
-			return;
+			return 1;
 		}
 
 		/*
 		 * So let's look at lists. Lists can only contain
 		 * one type of values. So you either have a list
-		 * of strings, a list of ints or a list of uints.
+		 * of strings, a list of ints or a list of ints.
 		 * In this case we ask for the whole current playlist.
-		 * It will return a result with a list of uints.
-		 * Each uint is the id number of the entry.
+		 * It will return a result with a list of ints.
+		 * Each int is the id number of the entry.
 		 *
 		 * The playlist has two important numbers: the entry
 		 * and the position. Each alteration command (move,
@@ -61,20 +68,38 @@ public class Tutorial1 {
 		 * first we ask for the playlist.
 		 */
 
-		Xmms.Result res = xc.playlist_list_entries(null);
+		Xmms.Result res = xc.playlist_list_entries(Xmms.ACTIVE_PLAYLIST);
 		res.wait();
 
-		if (res.iserror()) {
-			GLib.stderr.printf("Xmms.Client.playlist_list_entries returned error: %s\n", res.get_error());
+		weak string error = null;
+		weak Xmms.Value value = res.get_value();
+
+		if (value.is_error() && value.get_error(out error)) {
+			GLib.stderr.printf("Xmms.Client.playlist_list_entries returned error: %s\n", error);
+			return 1;
 		}
 
-		for (res.list_first(); res.list_valid(); res.list_next()) {
-			uint id;
-			if (!res.get_uint(out id)) {
+		weak Xmms.ListIter iter = null;
+
+		if (!value.get_list_iter(out iter)) {
+			GLib.stderr.printf("Could not get list iterator!\n");
+			return 1;
+		}
+
+		while (iter.valid()) {
+			weak Xmms.Value entry = null;
+
+			if (!iter.entry(out entry)) {
+				GLib.stdout.printf("Could not get list entry!\n");
+				return 1;
+			}
+
+			int id;
+			if (!entry.get_int(out id)) {
 				/* whoops, this should never happen unless
 				 * you did something wrong */
-				GLib.stderr.printf("Couldn't get uint from list\n");
-				return;
+				GLib.stderr.printf("Couldn't get int from list\n");
+				return 1;
 			}
 
 			/* Now we have an id number saved in the id variable.
@@ -93,6 +118,8 @@ public class Tutorial1 {
 			 *
 			 * More about this later. Baby steps :-)
 			 */
+
+			iter.next();
 		}
 
 		/*
@@ -106,5 +133,7 @@ public class Tutorial1 {
 		 *
 		 * We just throw it away.
 		 */
+
+		return 0;
 	}
 }

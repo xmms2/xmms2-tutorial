@@ -1,5 +1,5 @@
 public class Tutorial1 {
-	public static void main (string[] args) {
+	public static int main (string[] args) {
 		/*
 		 * The first part of this program is
 		 * commented in tut1.c See that one for
@@ -10,7 +10,7 @@ public class Tutorial1 {
 		weak string path = GLib.Environment.get_variable("XMMS_PATH");
 		if (!xc.connect(path)) {
 			GLib.stderr.printf("Could not connect: %s\n", xc.get_last_error());
-			return;
+			return 1;
 		}
 
 		/*
@@ -22,13 +22,18 @@ public class Tutorial1 {
 		Xmms.Result res = xc.playback_current_id();
 		res.wait();
 
-		if (res.iserror()) {
-			GLib.stderr.printf("Xmms.Client.playback_current_id returned error: %s\n", res.get_error());
+		weak string error1 = null;
+		weak Xmms.Value value1 = res.get_value();
+
+		if (value1.is_error() && value1.get_error(out error1)) {
+			GLib.stderr.printf("Xmms.Client.playback_current_id returned error: %s\n", error1);
+			return 1;
 		}
 
-		uint id;
-		if (!res.get_uint(out id)) {
-			GLib.stderr.printf("Xmms.Client.playback_current_id didn't return uint as expected\n");
+		int id;
+		if (!value1.get_int(out id)) {
+			GLib.stderr.printf("Xmms.Client.playback_current_id didn't return int as expected\n");
+			return 1;
 		}
 
 		GLib.stdout.printf("Currently playing id is %d\n", id);
@@ -51,18 +56,18 @@ public class Tutorial1 {
 		 */
 		if (id == 0) {
 			GLib.stderr.printf("Nothing is playing.\n");
-			return;
+			return 0;
 		}
 
 		/*
 		 * And now for something about return types from
 		 * clientlib. The clientlib will always return
 		 * an Xmms.Result that will eventually be filled.
-		 * It can be filled with int, uint and string  as
+		 * It can be filled with int and string  as
 		 * base types. It can also be filled with more complex
 		 * types like lists and dicts. A dict is a key<->value
 		 * representation where key is always a string but
-		 * the value can be int, uint or string.
+		 * the value can be int or string.
 		 *
 		 * When retrieving an entry from the medialib, you
 		 * get a dict as return. Let's print out some
@@ -71,21 +76,26 @@ public class Tutorial1 {
 		res = xc.medialib_get_info(id);
 		res.wait();
 
-		if (res.iserror()) {
+		weak string error2 = null;
+		weak Xmms.Value value2 = res.get_value();
+
+		if (value2.is_error() && value2.get_error(out error2)) {
 			/*
 			 * This can return error if the id
 			 * is not in the medialib
 			 */
-			GLib.stderr.printf("Medialib get info returns error, %s\n", res.get_error());
-			return;
+			GLib.stderr.printf("Medialib get info returns error, %s\n", error2);
+			return 1;
 		}
+
+		Xmms.Value metadata = value2.propdict_to_dict();
 
 		/*
 		 * Dicts can't be extracted, but we can extract
 		 * entries from the dict, like this:
 		 */
 		weak string val;
-		if (!res.get_dict_entry_string("artist", out val)) {
+		if (!metadata.dict_entry_get_string("artist", out val)) {
 			/*
 			 * if we end up here it means that the key "artist" wasn't
 			 * in the dict or that the value for "artist" wasn't a
@@ -104,17 +114,19 @@ public class Tutorial1 {
 
 		GLib.stdout.printf ("artist = %s\n", val);
 
-		if (!res.get_dict_entry_string("title", out val)) {
+		if (!metadata.dict_entry_get_string("title", out val)) {
 			val = "No Title";
 		}
 
 		GLib.stdout.printf ("title = %s\n", val);
 
 		int intval;
-		if (!res.get_dict_entry_int("bitrate", out intval)) {
+		if (!metadata.dict_entry_get_int("bitrate", out intval)) {
 			intval = 0;
 		}
 
 		GLib.stdout.printf ("bitrate = %d\n", intval);
+
+		return 0;
 	}
 }
