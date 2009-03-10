@@ -70,11 +70,11 @@ if id == 0:
 And now for something about return types from
 clientlib. The clientlib will always return
 an XMMSResult that will eventually be filled.
-It can be filled with int, uint and string  as
+It can be filled with int and string  as
 base types. It can also be filled with more complex
 types like lists and dicts. A dict is a key<->value
 representation where key is always a string but
-the value can be int, uint or string.
+the value can be int or string.
 
 When retrieving an entry from the medialib, you
 get a dict as return. Let's print out some

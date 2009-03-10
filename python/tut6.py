@@ -49,7 +49,7 @@ def my_current_id(result):
 	At this point the XMMSResult instance is filled with the
 	answer. And we can now extract it as normal.
 	"""
-	print "Current id is %u" % result.value()
+	print "Current id is %d" % result.value()
 	ml.quit()
 
 """
