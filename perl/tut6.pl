@@ -24,7 +24,7 @@ sub my_current_id {
     # now extract it as normal.  The second argument is our connection object
     # which was passed in as the userdata.
 
-    printf "Current id is %u\n", $result->value;
+    printf "Current id is %d\n", $result->value;
     $xmms->quit_loop;
 }
 
