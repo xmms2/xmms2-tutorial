@@ -30,8 +30,7 @@
  * for each entry in the playlist.
  */
 void
-get_mediainfo (xmmsc_connection_t *connection,
-               unsigned int id)
+get_mediainfo (xmmsc_connection_t *connection, int id)
 {
 	xmmsc_result_t *result;
 	xmmsv_t *return_value;
@@ -124,8 +123,8 @@ main (int argc, char **argv)
 	 * ints, etc.
 	 *
 	 * In this case we ask for the whole current playlist.
-	 * It will return a result with a list of uints.
-	 * Each uint is the id number of the entry.
+	 * It will return a result with a list of ints.
+	 * Each int is the id number of the entry.
 	 *
 	 * The playlist has two important numbers: the entry
 	 * and the position. Each alteration command (move,
@@ -171,7 +170,7 @@ main (int argc, char **argv)
 	 */
 	for (; xmmsv_list_iter_valid (it); xmmsv_list_iter_next (it)) {
 		/* let's extract the id of the current entry in the list */
-		unsigned int id;
+		int id;
 		xmmsv_t *list_entry;
 
 		/* First, get the list entry pointed at by the iterator. */
@@ -182,11 +181,11 @@ main (int argc, char **argv)
 			exit (EXIT_FAILURE);
 		}
 
-		/* Then, extract the uint from the entry as we always do. */
-		if (!xmmsv_get_uint (list_entry, &id)) {
+		/* Then, extract the int from the entry as we always do. */
+		if (!xmmsv_get_int (list_entry, &id)) {
 			/* whoops, this should never happen unless
 			 * you did something wrong */
-			fprintf (stderr, "Couldn't get uint from list entry\n");
+			fprintf (stderr, "Couldn't get int from list entry\n");
 			exit (EXIT_FAILURE);
 		}
 

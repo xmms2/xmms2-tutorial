@@ -38,7 +38,7 @@ main (int argc, char **argv)
 	 */
 	const char *val;
 	int intval;
-	unsigned int id;
+	int id;
 	xmmsv_t *dict_entry;
 	xmmsv_t *infos;
 
@@ -71,9 +71,9 @@ main (int argc, char **argv)
 		         err_buf);
 	}
 
-	if (!xmmsv_get_uint (return_value, &id)) {
+	if (!xmmsv_get_int (return_value, &id)) {
 		fprintf (stderr, "xmmsc_playback_current_id didn't "
-		         "return uint as expected\n");
+		         "return int as expected\n");
 		/* Fake id (ids are >= 1) used as an error flag. */
 		id = 0;
 	}
@@ -114,7 +114,7 @@ main (int argc, char **argv)
 	 * clientlib. The clientlib will always return
 	 * an xmmsc_result_t that will eventually contain the
 	 * return value as a xmmsv_t struct.
-	 * The value can contain an int, uint and string as
+	 * The value can contain an int and string as
 	 * base type. It can also contain more complex
 	 * types like lists and dicts.
 	 * A list is a sequence of values, each of them

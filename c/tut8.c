@@ -39,7 +39,7 @@ my_playtime (xmmsv_t *value, void *userdata)
 	 * At this point the result struct is filled with the
 	 * answer. And we can now extract it as normal.
 	 */
-	unsigned int time;
+	int time;
 
 	int keep_alive;
 
@@ -50,7 +50,7 @@ my_playtime (xmmsv_t *value, void *userdata)
 	 */
 	GMainLoop *ml = (GMainLoop *) userdata;
 
-	if (!xmmsv_get_uint (value, &time)) {
+	if (!xmmsv_get_int (value, &time)) {
 		fprintf (stderr, "Value didn't contain the expected type!\n");
 		exit (EXIT_FAILURE);
 	}
@@ -59,7 +59,7 @@ my_playtime (xmmsv_t *value, void *userdata)
 	 * Print the time on the same line and flush stdout
 	 * so that the text becomes visible.
 	 */
-	printf ("\r%4ums has been played", time);
+	printf ("\r%4dms has been played", time);
 	fflush (stdout);
 
 	/*

@@ -34,7 +34,7 @@ main (int argc, char **argv)
 	const char *err_buf;
 
 	/* This will be used later */
-	unsigned int id;
+	int id;
 
 	connection = xmmsc_init ("tutorial2");
 	if (!connection) {
@@ -83,13 +83,13 @@ main (int argc, char **argv)
 	}
 
 	/*
-	 * Let's extract the uint value from the value struct.
+	 * Let's extract the int value from the value struct.
 	 * The caveat here is that you have to know what type
 	 * of value is returned in response to each command,
 	 * or check it manually using xmmsv_get_type.
 	 *
 	 * In this case we know that xmmsc_playback_current_id
-	 * will return a UINT.
+	 * will return a INT.
 	 *
 	 * Know that all xmmsv_get_* calls can return FALSE
 	 * and that means that the value you are requesting is
@@ -97,9 +97,9 @@ main (int argc, char **argv)
 	 *
 	 * Values are stored in the pointer passed to xmmsv_get_*
 	 */
-	if (!xmmsv_get_uint (return_value, &id)) {
+	if (!xmmsv_get_int (return_value, &id)) {
 		fprintf (stderr, "xmmsc_playback_current_id didn't "
-		         "return uint as expected\n");
+		         "return int as expected\n");
 	}
 
 	/* Print the value */

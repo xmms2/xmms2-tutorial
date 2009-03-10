@@ -38,13 +38,6 @@ my_dict_foreach (const char *key, xmmsv_t *value, void *user_data)
 		case XMMSV_TYPE_NONE:
 			/* nothing to do, empty value */
 			break;
-		case XMMSV_TYPE_UINT32:
-			{
-				unsigned int val;
-				xmmsv_get_uint (value, &val);
-				printf ("%s = %u\n", key, val);
-				break;
-			}
 		case XMMSV_TYPE_INT32:
 			{
 				int val;
@@ -103,13 +96,6 @@ my_propdict_inner_foreach (const char *source, xmmsv_t *value,
 		case XMMSV_TYPE_NONE:
 			/* nothing to do, empty value */
 			break;
-		case XMMSV_TYPE_UINT32:
-			{
-				unsigned int val;
-				xmmsv_get_uint (value, &val);
-				printf ("%s:%s = %u\n", source, key, val);
-				break;
-			}
 		case XMMSV_TYPE_INT32:
 			{
 				int val;
@@ -164,7 +150,7 @@ main (int argc, char **argv)
 	 * try to explain them here.
 	 *
 	 * A normal dict contains key<->value mappings as normal, where
-	 * the value is of a simple type (int, uint, string). Getting
+	 * the value is of a simple type (int, string). Getting
 	 * values from this is straightforward (see tut3).
 	 *
 	 * On the other hand, xmmsc_medialib_get_info returns what we call a

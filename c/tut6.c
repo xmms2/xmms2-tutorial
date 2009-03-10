@@ -38,7 +38,7 @@ my_current_id (xmmsv_t *value, void *userdata)
 	 * At this point the value struct contains the
 	 * answer. And we can now extract it as normal.
 	 */
-	unsigned int id;
+	int id;
 
 	/*
 	 * we passed the mainloop as an argument
@@ -47,12 +47,12 @@ my_current_id (xmmsv_t *value, void *userdata)
 	 */
 	GMainLoop *ml = (GMainLoop *) userdata;
 
-	if (!xmmsv_get_uint (value, &id)) {
+	if (!xmmsv_get_int (value, &id)) {
 		fprintf (stderr, "Value didn't contain the expected type!\n");
 		exit (EXIT_FAILURE);
 	}
 
-	printf ("Current id is %u\n", id);
+	printf ("Current id is %d\n", id);
 
 	g_main_loop_quit (ml);
 
