@@ -33,7 +33,7 @@ class MyClient
 		 * Note that a callback function must return a bool.
 		 * The meaning of this return value is explained later.
 		 */
-		bool my_current_id( const unsigned int& id );
+		bool my_current_id( const int& id );
 		bool error_handler( const std::string& error );
 
 	private:
@@ -94,7 +94,7 @@ MyClient::MyClient() : client_( "tutorial6" )
 
 MyClient::~MyClient() { }
 
-bool MyClient::my_current_id( const unsigned int& id )
+bool MyClient::my_current_id( const int& id )
 {
 
 	/*

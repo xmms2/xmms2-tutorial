@@ -27,7 +27,7 @@
 #include <glib.h>
 
 // Look at tutorial 6 for this.
-bool my_current_id( const unsigned int& id )
+bool my_current_id( const int& id )
 {
 	std::cout << "Current ID is " << id << std::endl;
 	return false;

@@ -37,7 +37,7 @@ class MyClient
 		~MyClient();
 
 	private: // Callback functions
-		bool my_current_id( const unsigned int& id );
+		bool my_current_id( const int& id );
 		bool my_get_info( const Xmms::PropDict& propdict );
 
 		void my_propdict_foreach( std::ostream& stream,
@@ -96,7 +96,7 @@ MyClient::~MyClient()
 {
 }
 
-bool MyClient::my_current_id( const unsigned int& id )
+bool MyClient::my_current_id( const int& id )
 {
 	std::cout << "Currently playing ID is " << id << std::endl;
 

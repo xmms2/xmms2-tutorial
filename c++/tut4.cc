@@ -28,7 +28,7 @@
  * in the playlist.
  */
 void
-get_mediainfo( const Xmms::Client& client, unsigned int id )
+get_mediainfo( const Xmms::Client& client, int id )
 {
 
 	Xmms::Dict info = client.medialib.getInfo( id );

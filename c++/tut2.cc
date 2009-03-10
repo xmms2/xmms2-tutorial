@@ -82,7 +82,7 @@ main()
 		 * the appropriate type in synchronous mode. This will
 		 * be handled in detail in later tutorials.
 		 */
-		unsigned int id = client.playback.currentID();
+		int id = client.playback.currentID();
 		std::cout << "Currently playing ID is " << id << std::endl;
 
 	}

@@ -38,17 +38,7 @@ my_dict_foreach( const std::string& key, const Xmms::Dict::Variant& value )
 	 * Here we need to decide how to print the values
 	 * and move on with life.
 	 */
-	if( value.type() == typeid( unsigned int ) ) {
-		
-		/*
-		 * See boost::variant docs for more information.
-		 * http://boost.org/doc/html/variant.html
-		 */
-		unsigned int temp = boost::get< unsigned int >( value );
-		std::cout << temp;
-
-	}
-	else if( value.type() == typeid( int ) ) {
+	if( value.type() == typeid( int ) ) {
 
 		int temp = boost::get< int >( value );
 		std::cout << temp;

@@ -31,7 +31,7 @@ main()
 	Xmms::Client client("tutorial3");
 	client.connect( std::getenv("XMMS_PATH") );
 
-	unsigned int id = client.playback.currentID();
+	int id = client.playback.currentID();
 	std::cout << "Currently playing id is " << id << std::endl;
 
 	/*
@@ -60,13 +60,13 @@ main()
 	 * And now for something about return types from
 	 * clientlib. The c++ API will make sure that
 	 * you'll get the right type from a function.
-	 * The return value can be int, unsigned int and
+	 * The return value can be int and
 	 * string as base types. It can also be a more
 	 * complex type such as Xmms::List or Xmms::Dict.
 	 * A dict is a key<->value representation, very
 	 * much like std::map, but where they key is
 	 * always a string but the value can be
-	 * int, unsigned int or a string.
+	 * int or a string.
 	 *
 	 * When retrieving an entry from the medialib, you
 	 * get a dict as return. Let's print out some
