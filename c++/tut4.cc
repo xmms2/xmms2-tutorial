@@ -72,12 +72,12 @@ main()
 		client.connect( std::getenv( "XMMS_PATH" ) );
 
 		/*
-		 * So let's look at the lists. Lists can only contain
-		 * one type of values. So you either have a list of strings,
-		 * a list of ints or a list of unsigned ints.
-		 * In this case we ask for the whole current playlist.
-		 * It will return a list of unsigned ints.
-		 * Each unsigned int is the id number of the entry.
+		 * So let's look at the lists.
+		 *
+		 * Lists can only contain one type of values. So you either
+		 * have a list of strings or a list of ints.  In this case
+		 * we ask for the whole current playlist.  It will return a
+		 * list of ints.  Each int is the id number of the entry.
 		 *
 		 * The playlist has two important numbers: the entry and the position.
 		 * Each alteration command (move, remove) works on the position
@@ -86,25 +86,24 @@ main()
 		 *
 		 * First we ask for the playlist.
 		 */
-		Xmms::List< unsigned int > list = client.playlist.listEntries();
+		Xmms::List< int > list = client.playlist.listEntries();
 
 		/*
 		 * Now iterate the list.
-		 * Xmms::List works about the same way as any standard container
-		 * const_iterator, with a couple of differences:
 		 *
-		 *   - End of list is checked with isValid() method.
-		 *   - You must use pre-positioned operator++ to move forward.
-		 *     There is no post-positioned operator++.
-		 *   - You can jump to the beginnig of the list with first() method.
+		 * Xmms::List works about the same way as any standard
+		 * container bidirectional const_iterator.  It would be a
+		 * minor performance loss if one didn't cache end().  It's
+		 * because obtaining it from the C library cannot be
+		 * optimized out by the compiler.
 		 */
-		for( ; list.isValid() ; ++list ) {
+		for( Xmms::List< int >::const_iterator i(list.begin()), i_end(list.end()); i != i_end; ++i ) {
 
 			/* Now we have an ID number. Let's feed it to the function
 			 * above (which is the same as we learned in tut3.cc)
 			 * and print out some info on the entry.
 			 */
-			get_mediainfo( client, *list );
+			get_mediainfo( client, *i );
 
 			/*
 			 * Note that the position of the entry is up to you to keep
