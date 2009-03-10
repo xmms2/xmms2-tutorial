@@ -1,11 +1,11 @@
 /*  XMMS2 - X Music Multiplexer System
  *  Copyright (C) 2003-2006 XMMS2 Team
- * 
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
  *  version 2.1 of the License, or (at your option) any later version.
- *                   
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -102,7 +102,7 @@ main (int argc, char **argv)
 		exit (EXIT_FAILURE);
 	}
 
-	/* 
+	/*
 	 * Initialize the mainloop, for more information about GLib mainloop
 	 * see the GTK docs.
 	 */
@@ -115,7 +115,7 @@ main (int argc, char **argv)
 	 * unref it. This means we can't do syncronous operations on this connection.
 	 *
 	 * In simple cases you can use the XMMS_CALLBACK_SET macro, but in order to
-	 * be verbose here I do it all manually. Let's ask for the current id 
+	 * be verbose here I do it all manually. Let's ask for the current id
 	 * in an async way instead of the sync way as we did in tut2.
 	 */
 

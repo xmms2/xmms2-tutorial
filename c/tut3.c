@@ -1,11 +1,11 @@
 /*  XMMS2 - X Music Multiplexer System
  *  Copyright (C) 2003-2006 XMMS2 Team
- * 
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
  *  version 2.1 of the License, or (at your option) any later version.
- *                   
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -26,7 +26,7 @@ main (int argc, char **argv)
 {
 	/*
 	 * The first part of this program is
-	 * commented on in tut1.c and tut2.c 
+	 * commented on in tut1.c and tut2.c
 	 */
 	xmmsc_connection_t *connection;
 	xmmsc_result_t *result;
@@ -81,7 +81,7 @@ main (int argc, char **argv)
 	/* Print the value */
 	printf ("Currently playing id is %d\n", id);
 
-	/* 
+	/*
 	 * Same drill as before. Release memory
 	 * so that we can reuse it in the next
 	 * clientlib call.
@@ -98,7 +98,7 @@ main (int argc, char **argv)
 	 * When we request information for an entry, it will
 	 * be requested from the medialib, not the playlist
 	 * or the playback. The playlist and playback only
-	 * know the unique id of the entry. All other 
+	 * know the unique id of the entry. All other
 	 * information must be retrieved in subsequent calls.
 	 *
 	 * Entry 0 is non valid. Only 1-inf is valid.
@@ -109,7 +109,7 @@ main (int argc, char **argv)
 		exit (EXIT_FAILURE);
 	}
 
-	/* 
+	/*
 	 * And now for something about return types from
 	 * clientlib. The clientlib will always return
 	 * an xmmsc_result_t that will eventually contain the
@@ -141,7 +141,7 @@ main (int argc, char **argv)
 
 	if (xmmsv_is_error (return_value) &&
 	    xmmsv_get_error (return_value, &err_buf)) {
-		/* 
+		/*
 		 * This can return error if the id
 		 * is not in the medialib
 		 */
@@ -176,7 +176,7 @@ main (int argc, char **argv)
 		 * if we end up here it means that the key "artist" wasn't
 		 * in the dict or that the value for "artist" wasn't a
 		 * string.
-		 * 
+		 *
 		 * You can check the type of the entry (if there is one) with
 		 * xmmsv_get_type (dict_entry). It will return an
 		 * xmmsv_type_t enum describing the type.

@@ -1,11 +1,11 @@
 /*  XMMS2 - X Music Multiplexer System
  *  Copyright (C) 2003-2006 XMMS2 Team
- * 
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
  *  version 2.1 of the License, or (at your option) any later version.
- *                   
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -52,9 +52,9 @@ main (int argc, char **argv)
 	/*
 	 * Now we send a command that will return
 	 * a result. Let's find out which entry
-	 * is currently playing. 
+	 * is currently playing.
 	 *
-	 * Note that this program has be run while 
+	 * Note that this program has be run while
 	 * xmms2 is playing something, otherwise
 	 * xmmsc_playback_current_id will return 0.
 	 */

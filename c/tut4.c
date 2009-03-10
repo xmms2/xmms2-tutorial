@@ -1,11 +1,11 @@
 /*  XMMS2 - X Music Multiplexer System
  *  Copyright (C) 2003-2006 XMMS2 Team
- * 
+ *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
  *  version 2.1 of the License, or (at your option) any later version.
- *                   
+ *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -202,7 +202,7 @@ main (int argc, char **argv)
 		 * to keep track of. I suggest that you keep
 		 * the playlist in a local data type that is similar
 		 * to a linked list. This way you can easily work
-		 * with playlist updates. 
+		 * with playlist updates.
 		 *
 		 * More about this later. Baby steps :-)
 		 */
