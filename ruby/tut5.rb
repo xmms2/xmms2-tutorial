@@ -63,16 +63,14 @@ ml = GLib::MainLoop.new(nil, false)
 # another clientlib method is called to send this command and tell the server
 # we are awaiting a response. The server sends a response which gets put in
 # another queue. Then another method is called that checks if any responses are
-# waiting in the input queue. If there is, the result sent by the server is
-# passed to the block, which can obtain a value.
+# waiting in the input queue. If there is, a value is extracted from the
+# result sennt by the server. That value is then passed to the block.
 
 # That may have been a complicated way of explaining things, so look at it this
 # way. The mainloop does all the waiting on the server instead of the 'wait'
 # method and when results come back, a callback is called. Ruby's blocks make
 # this an absolute joy for us.
-xmms.playback_current_id.notifier do |res|
-	id = res.value
-
+xmms.playback_current_id.notifier do |id|
 	if(id == 0)
 		puts 'There is no current ID. XMMS2 is probably not playing anything.'
 	else
