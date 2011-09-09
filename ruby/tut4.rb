@@ -54,7 +54,7 @@ begin
 		end
 		begin
 			# Remember, the playlist array is zero-indexed!
-			puts "#{index + 1}. #{xmms.medialib_get_info(id).wait.value[:url]}"
+			puts "#{index + 1}. #{xmms.medialib_get_info(id).wait.value.to_propdict[:url]}"
 			# It's possible that the URL isn't defined by the server, like if
 			# you added a non-media file to the playlist. You should keep that
 			# in mind when writing a client, but in this case PropDict#[:url]

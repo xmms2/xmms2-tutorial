@@ -111,7 +111,11 @@ begin
 			# info[], we'll use an 'each' method instead. The 'each' method is
 			# similar to Hash#each, except that there's an additional source
 			# argument passed to the block.
-			info.each_pair { |src, key, val| puts "[#{src}] #{key} = #{val}" }
+			info.each_pair { |key, data|
+				data.each_pair { |src, val|
+					puts "[#{src}] #{key} = #{val}"
+				}
+			}
 			# Wow, that whole table was printed out with one line of code!
 
 		# And, of course we check for errors since we want a bulletproof
