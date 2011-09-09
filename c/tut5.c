@@ -176,7 +176,7 @@ main (int argc, char **argv)
 	 * First we retrieve the config values stored in the server and print
 	 * them out. This is a normal dict.
 	 */
-	result = xmmsc_configval_list (connection);
+	result = xmmsc_config_list_values (connection);
 	xmmsc_result_wait (result);
 	return_value = xmmsc_result_get_value (result);
 
