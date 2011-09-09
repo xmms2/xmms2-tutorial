@@ -49,7 +49,7 @@ if (!$xmms->connect) {
 # First we retrieve the config values stored in the server and print them out.
 # This is a normal dict.
 
-my $result = $xmms->configval_list;
+my $result = $xmms->config_list_values;
 $result->wait;
 my $value = $result->value;
 
@@ -64,10 +64,10 @@ while (my ($key, $val) = each %{ $value }) {
 $result = $xmms->medialib_get_info( 1 );
 $result->wait;
 
-my $source_hash = $result->value->source_hash;
+my $propdict = $result->value;
 
-for my $source (keys %{ $source_hash }) {
-    while (my ($key, $val) = each %{ $source_hash->{$source} }) {
-        print "$source:$key = $val\n";
+while (my ($key, $values) = each %{ $propdict } ) {
+    while (my ($source, $val) = each %{ $values }) {
+        print "[$source] $key = $val\n";
     }
 }

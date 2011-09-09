@@ -18,14 +18,14 @@ if (!$xmms->connect) {
 # program first before returning here.
 
 sub my_current_id {
-    my ($result, $xmms) = @_;
+    my ($value, $xc) = @_;
 
     # At this point the result instance is filled with the answer and we can
     # now extract it as normal.  The second argument is our connection object
     # which was passed in as the userdata.
 
-    printf "Current id is %d\n", $result->value;
-    $xmms->quit_loop;
+    printf "Current id is %d\n", $value;
+    $xc->quit_loop;
 }
 
 # Let's ask for the current id in an async way instead of the sync way as we
@@ -35,7 +35,8 @@ sub my_current_id {
 # my $request = $xmms->playback_current_id;
 # $request->notifier_set( \&my_current_id, $xmms );
 
-$xmms->request( playback_current_id => \&my_current_id, $xmms );
+#$xmms->request( playback_current_id => \&my_current_id );
+$xmms->request( playback_current_id => sub { my_current_id (@_, $xmms) } );
 
 # As you see we do it pretty much the same way that we did in tut2, but instead
 # of being able to access the current id directly (as we would have if we where
