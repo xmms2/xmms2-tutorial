@@ -87,18 +87,10 @@ public class Tutorial1 {
 		}
 
 		while (iter.valid()) {
-			weak Xmms.Value entry = null;
-
-			if (!iter.entry(out entry)) {
-				GLib.stdout.printf("Could not get list entry!\n");
-				return 1;
-			}
-
 			int id;
-			if (!entry.get_int(out id)) {
-				/* whoops, this should never happen unless
-				 * you did something wrong */
-				GLib.stderr.printf("Couldn't get int from list\n");
+
+			if (!iter.entry_int(out id)) {
+				GLib.stdout.printf("Could not get list entry!\n");
 				return 1;
 			}
 

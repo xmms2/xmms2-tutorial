@@ -7,7 +7,7 @@ public class Tutorial1 {
 		 * because xmms is deriving configuration values
 		 * from this name.
 		 */
-		Xmms.Client xc = new Xmms.Client("tutorial1");
+		var xc = new Xmms.Client("tutorial1");
 
 		/*
 		 * Now we need to connect to xmms2d. We need to
@@ -21,7 +21,7 @@ public class Tutorial1 {
 		 * and it will set the Xmms.Client.get_last_error() to a
 		 * string describing the error
 		 */
-		weak string path = GLib.Environment.get_variable("XMMS_PATH");
+		var path = GLib.Environment.get_variable("XMMS_PATH");
 		if (!xc.connect(path)) {
 			GLib.stderr.printf("Could not connect: %s\n", xc.get_last_error());
 			return 1;
@@ -32,7 +32,7 @@ public class Tutorial1 {
 		 * Now we can send commands. Let's do something easy
 		 * like getting xmms2d to start playback.
 		 */
-		Xmms.Result res = xc.playback_start();
+		var result = xc.playback_start();
 
 		/*
 		 * The command will be sent, and since this is a
@@ -40,7 +40,7 @@ public class Tutorial1 {
 		 * return here. The async / sync issue will be
 		 * commented on later.
 		 */
-		res.wait();
+		result.wait();
 
 		/*
 		 * When Xmms.Result.wait() returns, we have the
@@ -48,11 +48,13 @@ public class Tutorial1 {
 		 * and print it out if something went wrong
 		 */
 
-		weak string error = null;
-		weak Xmms.Value value = res.get_value();
+		var value = result.get_value();
 
-		if (value.is_error() && value.get_error(out error)) {
-			GLib.stderr.printf("Playback start returned error: %s\n", error);
+		if (value.is_error()) {
+			unowned string error = null;
+			if (value.get_error(out error)) {
+				GLib.stderr.printf("Playback start returned error: %s\n", error);
+			}
 			return 1;
 		}
 
